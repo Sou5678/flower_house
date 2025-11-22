@@ -385,3 +385,188 @@ exports.getProductAnalytics = async (req, res) => {
     });
   }
 };
+
+// @desc    Add images to product
+// @route   POST /api/admin/products/:id/images
+// @access  Private/Admin
+exports.addProductImages = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Product not found'
+      });
+    }
+
+    const { images } = req.body;
+
+    if (!images || !Array.isArray(images) || images.length === 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Images array is required'
+      });
+    }
+
+    // Validate image objects
+    for (const image of images) {
+      if (!image.public_id || !image.url) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Each image must have public_id and url'
+        });
+      }
+    }
+
+    // Add images to product
+    const newImages = images.map(image => ({
+      public_id: image.public_id,
+      url: image.url,
+      variants: image.variants || {},
+      alt: image.alt || product.name,
+      isPrimary: product.images.length === 0 && image.isPrimary !== false, // First image is primary by default
+      width: image.width,
+      height: image.height,
+      format: image.format,
+      bytes: image.bytes,
+      uploadedAt: new Date()
+    }));
+
+    product.images.push(...newImages);
+    await product.save();
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        product,
+        addedImages: newImages.length
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+// @desc    Remove image from product
+// @route   DELETE /api/admin/products/:id/images/:imageId
+// @access  Private/Admin
+exports.removeProductImage = async (req, res) => {
+  try {
+    const { deleteImage } = require('../config/cloudinary');
+    
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Product not found'
+      });
+    }
+
+    const imageIndex = product.images.findIndex(
+      img => img._id.toString() === req.params.imageId
+    );
+
+    if (imageIndex === -1) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Image not found'
+      });
+    }
+
+    const imageToDelete = product.images[imageIndex];
+
+    // Delete from Cloudinary
+    try {
+      await deleteImage(imageToDelete.public_id);
+    } catch (cloudinaryError) {
+      console.error('Failed to delete from Cloudinary:', cloudinaryError);
+      // Continue with database deletion even if Cloudinary deletion fails
+    }
+
+    // Remove from product
+    product.images.splice(imageIndex, 1);
+
+    // If deleted image was primary and there are other images, make first one primary
+    if (imageToDelete.isPrimary && product.images.length > 0) {
+      product.images[0].isPrimary = true;
+    }
+
+    await product.save();
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        product,
+        deletedImage: imageToDelete.public_id
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+// @desc    Update product image order and primary image
+// @route   PUT /api/admin/products/:id/images/reorder
+// @access  Private/Admin
+exports.updateProductImageOrder = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Product not found'
+      });
+    }
+
+    const { imageOrder, primaryImageId } = req.body;
+
+    if (imageOrder && Array.isArray(imageOrder)) {
+      // Reorder images based on provided order
+      const reorderedImages = [];
+      
+      for (const imageId of imageOrder) {
+        const image = product.images.find(img => img._id.toString() === imageId);
+        if (image) {
+          reorderedImages.push(image);
+        }
+      }
+
+      // Add any images not in the order array at the end
+      const remainingImages = product.images.filter(
+        img => !imageOrder.includes(img._id.toString())
+      );
+      
+      product.images = [...reorderedImages, ...remainingImages];
+    }
+
+    if (primaryImageId) {
+      // Update primary image
+      product.images.forEach(img => {
+        img.isPrimary = img._id.toString() === primaryImageId;
+      });
+    }
+
+    await product.save();
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        product
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};

@@ -36,6 +36,7 @@ const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage')
 
 // Components (keep Nav and Contact eager loaded for better UX)
 import Nav from "./components/Nav";
+import ErrorBoundary from "./components/ErrorBoundary";
 const Contact = lazy(() => import('./components/Contact'));
 // const PerformanceMonitor = lazy(() => import('./components/PerformanceMonitor'));
 
@@ -43,12 +44,42 @@ const Contact = lazy(() => import('./components/Contact'));
 import { WishlistProvider, useWishlist } from './contexts/WishlistContext';
 const AdminProvider = lazy(() => import('./admin/contexts/AdminContext').then(module => ({ default: module.AdminProvider })));
 
+// Utilities
+import { ScrollToTop } from './utils/scrollToTop';
+
 // Loading component for better UX
 const PageLoader = memo(() => (
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50">
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-50">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
-      <p className="text-neutral-600 font-medium">Loading...</p>
+      {/* Apna Flar Logo with Animation */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-rose-600 mb-2">
+          <span className="text-rose-600">Apna</span>
+          <span className="text-pink-600 ml-2 font-script">Flar</span>
+        </h1>
+        <p className="text-gray-600 text-sm">Fresh Flowers, Delivered with Love</p>
+      </div>
+      
+      {/* Enhanced Loading Animation */}
+      <div className="relative">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-rose-200 border-t-rose-600 mx-auto mb-4"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-pulse">
+            <svg className="w-6 h-6 text-rose-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <p className="text-gray-600 font-medium animate-pulse">Loading your floral experience...</p>
+      
+      {/* Loading Tips */}
+      <div className="mt-6 max-w-md mx-auto">
+        <p className="text-xs text-gray-500">
+          💡 Did you know? Fresh flowers can improve your mood and reduce stress!
+        </p>
+      </div>
     </div>
   </div>
 ));
@@ -149,15 +180,18 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <WishlistProvider>
-        <AppContent />
-        {/* Performance Monitor disabled for now */}
-        {/* <Suspense fallback={null}>
-          <PerformanceMonitor />
-        </Suspense> */}
-      </WishlistProvider>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <ScrollToTop />
+        <WishlistProvider>
+          <AppContent />
+          {/* Performance Monitor disabled for now */}
+          {/* <Suspense fallback={null}>
+            <PerformanceMonitor />
+          </Suspense> */}
+        </WishlistProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

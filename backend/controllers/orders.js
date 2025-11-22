@@ -86,7 +86,7 @@ exports.createOrder = async (req, res) => {
 
     // Send order confirmation email
     try {
-      await EmailService.sendOrderConfirmation(order, req.user);
+      await EmailService.sendOrderConfirmation(req.user, order);
     } catch (emailError) {
       console.log('Order confirmation email failed:', emailError);
     }
@@ -165,9 +165,9 @@ exports.getOrder = async (req, res) => {
 // @access  Private/Admin
 exports.updateOrderStatus = async (req, res) => {
   try {
-    const { status, trackingNumber } = req.body;
+    const { status, trackingNumber, statusMessage } = req.body;
 
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user');
 
     if (!order) {
       return res.status(404).json({
@@ -176,12 +176,25 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
+    const oldStatus = order.status;
     order.status = status;
     if (trackingNumber) {
       order.trackingNumber = trackingNumber;
     }
+    if (statusMessage) {
+      order.statusMessage = statusMessage;
+    }
 
     await order.save();
+
+    // Send status update email if status changed
+    if (oldStatus !== status) {
+      try {
+        await EmailService.sendOrderStatusUpdate(order.user, order);
+      } catch (emailError) {
+        console.log('Order status update email failed:', emailError);
+      }
+    }
 
     res.status(200).json({
       status: 'success',

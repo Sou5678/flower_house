@@ -22,11 +22,33 @@ const productSchema = new mongoose.Schema({
     min: [0, 'Original price cannot be negative']
   },
   images: [{
-    url: String,
+    public_id: {
+      type: String,
+      required: true
+    },
+    url: {
+      type: String,
+      required: true
+    },
+    variants: {
+      thumbnail: String,
+      small: String,
+      medium: String,
+      large: String,
+      original: String
+    },
     alt: String,
     isPrimary: {
       type: Boolean,
       default: false
+    },
+    width: Number,
+    height: Number,
+    format: String,
+    bytes: Number,
+    uploadedAt: {
+      type: Date,
+      default: Date.now
     }
   }],
   category: {

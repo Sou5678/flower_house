@@ -11,7 +11,9 @@
     "create-admin": "node scripts/createAdmin.js",
     "reset-admin-password": "node scripts/resetAdminPassword.js",
     "create-test-users": "node scripts/createTestUsers.js",
-    "seed-products": "node scripts/seedProducts.js"
+    "seed-products": "node scripts/seedProducts.js",
+    "seed-real-data": "node scripts/seedRealData.js",
+    "test-email": "node scripts/testEmail.js"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +34,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.4",
     "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.10",
     "razorpay": "^2.9.6",
     "stripe": "^19.3.1"

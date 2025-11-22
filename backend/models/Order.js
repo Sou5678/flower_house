@@ -131,6 +131,7 @@ const orderSchema = new mongoose.Schema({
   },
   estimatedDelivery: Date,
   trackingNumber: String,
+  statusMessage: String,
   notes: String
 }, {
   timestamps: true

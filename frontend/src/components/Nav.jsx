@@ -129,9 +129,13 @@ const Nav = memo(() => {
     }
   }, []);
 
-  // Memoized menu close handler
+  // Memoized menu close handler with scroll to top
   const handleMenuClose = useCallback(() => {
     setIsMenuOpen(false);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, []);
 
   // Memoized search input handler
@@ -197,10 +201,11 @@ const Nav = memo(() => {
             {/* Logo */}
             <Link 
               to="/" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="text-display text-2xl font-semibold text-neutral-800 hover:text-primary-500 transition-all duration-300 whitespace-nowrap"
             >
-              <span className="text-primary-500">Amour</span>
-              <span className="text-script text-3xl ml-1">Florals</span>
+              <span className="text-primary-500">Apna</span>
+              <span className="text-script text-3xl ml-1">Flar</span>
             </Link>
           </div>
 

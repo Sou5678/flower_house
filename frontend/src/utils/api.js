@@ -329,3 +329,180 @@ API.interceptors.response.use(
 export { AuthErrorHandler, AUTH_ERROR_TYPES };
 
 export default API;
+// Enhanced API wrapper with comprehensive error handling and loading states
+import { handleApiError, retryRequest, globalLoadingManager } from './errorHandler';
+
+// API wrapper with error handling
+const apiWrapper = {
+  // GET request
+  get: async (url, config = {}) => {
+    try {
+      const response = await API.get(url, config);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  },
+
+  // POST request
+  post: async (url, data = {}, config = {}) => {
+    try {
+      const response = await API.post(url, data, config);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  },
+
+  // PUT request
+  put: async (url, data = {}, config = {}) => {
+    try {
+      const response = await API.put(url, data, config);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  },
+
+  // DELETE request
+  delete: async (url, config = {}) => {
+    try {
+      const response = await API.delete(url, config);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  },
+
+  // File upload with progress
+  upload: async (url, formData, onProgress = null) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+      
+      if (onProgress) {
+        config.onUploadProgress = (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          onProgress(percentCompleted);
+        };
+      }
+      
+      const response = await API.post(url, formData, config);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  },
+
+  // Request with retry
+  withRetry: async (requestFn, maxRetries = 3) => {
+    return retryRequest(requestFn, maxRetries);
+  }
+};
+
+// Specific API endpoints
+export const authAPI = {
+  login: (credentials) => apiWrapper.post('/api/auth/login', credentials),
+  register: (userData) => apiWrapper.post('/api/auth/register', userData),
+  logout: () => apiWrapper.get('/api/auth/logout'),
+  getProfile: () => apiWrapper.get('/api/auth/me'),
+  updateProfile: (data) => apiWrapper.put('/api/auth/updatedetails', data),
+  forgotPassword: (email) => apiWrapper.post('/api/auth/forgotpassword', { email }),
+  resetPassword: (token, password) => apiWrapper.put(`/api/auth/resetpassword/${token}`, { password })
+};
+
+export const productsAPI = {
+  getAll: (params = {}) => apiWrapper.get('/api/products', { params }),
+  getById: (id) => apiWrapper.get(`/api/products/${id}`),
+  create: (data) => apiWrapper.post('/api/admin/products', data),
+  update: (id, data) => apiWrapper.put(`/api/admin/products/${id}`, data),
+  delete: (id) => apiWrapper.delete(`/api/admin/products/${id}`),
+  addImages: (id, images) => apiWrapper.post(`/api/admin/products/${id}/images`, { images }),
+  removeImage: (id, imageId) => apiWrapper.delete(`/api/admin/products/${id}/images/${imageId}`),
+  reorderImages: (id, data) => apiWrapper.put(`/api/admin/products/${id}/images/reorder`, data)
+};
+
+export const categoriesAPI = {
+  getAll: () => apiWrapper.get('/api/categories'),
+  getById: (id) => apiWrapper.get(`/api/categories/${id}`),
+  create: (data) => apiWrapper.post('/api/admin/categories', data),
+  update: (id, data) => apiWrapper.put(`/api/admin/categories/${id}`, data),
+  delete: (id) => apiWrapper.delete(`/api/admin/categories/${id}`)
+};
+
+export const ordersAPI = {
+  getAll: (params = {}) => apiWrapper.get('/api/orders', { params }),
+  getById: (id) => apiWrapper.get(`/api/orders/${id}`),
+  create: (data) => apiWrapper.post('/api/orders', data),
+  cancel: (id, reason) => apiWrapper.put(`/api/order-management/${id}/cancel`, { reason }),
+  
+  // Admin endpoints
+  getAllAdmin: (params = {}) => apiWrapper.get('/api/order-management', { params }),
+  getByIdAdmin: (id) => apiWrapper.get(`/api/order-management/${id}`),
+  updateStatus: (id, data) => apiWrapper.put(`/api/order-management/${id}/status`, data),
+  bulkUpdateStatus: (data) => apiWrapper.put('/api/order-management/bulk-status', data),
+  getAnalytics: (params = {}) => apiWrapper.get('/api/order-management/analytics', { params })
+};
+
+export const inventoryAPI = {
+  getOverview: () => apiWrapper.get('/api/inventory/overview'),
+  getAlerts: () => apiWrapper.get('/api/inventory/alerts'),
+  updateStock: (id, data) => apiWrapper.put(`/api/inventory/${id}/stock`, data),
+  bulkUpdate: (data) => apiWrapper.put('/api/inventory/bulk-update', data),
+  getReport: (format = 'json') => apiWrapper.get(`/api/inventory/report?format=${format}`),
+  getMovements: (params = {}) => apiWrapper.get('/api/inventory/movements', { params })
+};
+
+export const uploadAPI = {
+  single: (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return apiWrapper.upload('/api/upload/product/single', formData);
+  },
+  multiple: (files, onProgress) => {
+    const formData = new FormData();
+    files.forEach(file => formData.append('images', file));
+    return apiWrapper.upload('/api/upload/product/multiple', formData, onProgress);
+  },
+  fromUrl: (imageUrl, productName) => 
+    apiWrapper.post('/api/upload/product/url', { imageUrl, productName }),
+  delete: (publicId) => 
+    apiWrapper.delete(`/api/upload/image/${encodeURIComponent(publicId)}`)
+};
+
+export const cartAPI = {
+  get: () => apiWrapper.get('/api/cart'),
+  add: (productId, quantity, options = {}) => 
+    apiWrapper.post('/api/cart/add', { productId, quantity, ...options }),
+  update: (productId, quantity) => 
+    apiWrapper.put('/api/cart/update', { productId, quantity }),
+  remove: (productId) => apiWrapper.delete(`/api/cart/remove/${productId}`),
+  clear: () => apiWrapper.delete('/api/cart/clear')
+};
+
+export const wishlistAPI = {
+  get: () => apiWrapper.get('/api/wishlist'),
+  add: (productId) => apiWrapper.post('/api/wishlist/add', { productId }),
+  remove: (productId) => apiWrapper.delete(`/api/wishlist/remove/${productId}`),
+  clear: () => apiWrapper.delete('/api/wishlist/clear')
+};
+
+export const emailAPI = {
+  getQueueStatus: () => apiWrapper.get('/api/email/queue/status'),
+  clearQueue: () => apiWrapper.delete('/api/email/queue'),
+  sendTest: (data) => apiWrapper.post('/api/email/test', data),
+  sendCustom: (data) => apiWrapper.post('/api/email/custom', data)
+};
+
+// Export enhanced API wrapper
+export { apiWrapper };

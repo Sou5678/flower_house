@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
 const hpp = require('hpp');
+const { globalErrorHandler, notFound } = require('./middleware/errorHandler');
+const { logger, requestLogger } = require('./utils/logger');
 require('dotenv').config();
 
 const app = express();
@@ -54,6 +56,9 @@ app.use(hpp());
 // 6. Compression
 app.use(compression());
 
+// 7. Request Logging
+app.use(requestLogger);
+
 // =====================
 // DATABASE CONNECTION
 // =====================
@@ -74,6 +79,10 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/email', require('./routes/email'));
+app.use('/api/upload', require('./routes/upload'));
+app.use('/api/inventory', require('./routes/inventory'));
+app.use('/api/order-management', require('./routes/orderManagement'));
 
 // =====================
 // HEALTH CHECK
@@ -126,47 +135,10 @@ app.post('/api/test/signup', async (req, res) => {
 // =====================
 
 // 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: `Route ${req.originalUrl} not found`
-  });
-});
+app.use(notFound);
 
 // Global Error Handler
-app.use((err, req, res, next) => {
-  console.error('🚨 Error:', err.message);
-  
-  // Mongoose validation error
-  if (err.name === 'ValidationError') {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Validation Error',
-      errors: Object.values(err.errors).map(e => e.message)
-    });
-  }
-  
-  // Mongoose duplicate key error
-  if (err.code === 11000) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Duplicate field value entered'
-    });
-  }
-  
-  // Mongoose cast error
-  if (err.name === 'CastError') {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Invalid resource ID'
-    });
-  }
-
-  res.status(err.statusCode || 500).json({
-    status: 'error',
-    message: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message
-  });
-});
+app.use(globalErrorHandler);
 
 // =====================
 // SERVER START
@@ -175,10 +147,12 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+  logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.info(`Health Check: http://localhost:${PORT}/api/health`);
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📍 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`📍 Test Signup: http://localhost:${PORT}/api/test/signup`);
 });
 
 module.exports = app;

@@ -9,7 +9,10 @@ const {
   updateAdminProduct,
   deleteAdminProduct,
   bulkUpdateProducts,
-  getProductAnalytics
+  getProductAnalytics,
+  addProductImages,
+  removeProductImage,
+  updateProductImageOrder
 } = require('../controllers/adminProducts');
 
 const {
@@ -154,6 +157,24 @@ router.delete('/products/:id',
   requireConfirmation,
   logAdminActivity('delete', 'product'),
   deleteAdminProduct
+);
+
+// Add images to product
+router.post('/products/:id/images',
+  logAdminActivity('update', 'product'),
+  addProductImages
+);
+
+// Remove image from product
+router.delete('/products/:id/images/:imageId',
+  logAdminActivity('update', 'product'),
+  removeProductImage
+);
+
+// Update product image order
+router.put('/products/:id/images/reorder',
+  logAdminActivity('update', 'product'),
+  updateProductImageOrder
 );
 
 // =====================

@@ -49,11 +49,11 @@ const Footer = ({ className = "" }) => {
           <div>
             <h3 className="text-heading font-semibold mb-4 text-lg text-primary-300">Explore</h3>
             <ul className="space-y-3 text-body text-neutral-300">
-              <li><Link to="/" className="hover:text-primary-300 transition-all duration-300">Home</Link></li>
-              <li><Link to="/products" className="hover:text-primary-300 transition-all duration-300">Shop All</Link></li>
-              <li><Link to="/collections" className="hover:text-primary-300 transition-all duration-300">Collections</Link></li>
-              <li><Link to="/about" className="hover:text-primary-300 transition-all duration-300">Our Story</Link></li>
-              <li><Link to="/contact" className="hover:text-primary-300 transition-all duration-300">Contact</Link></li>
+              <li><Link to="/" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Home</Link></li>
+              <li><Link to="/products" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Shop All</Link></li>
+              <li><Link to="/collections" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Collections</Link></li>
+              <li><Link to="/about" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Our Story</Link></li>
+              <li><Link to="/contact" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Contact</Link></li>
             </ul>
           </div>
 
@@ -61,11 +61,11 @@ const Footer = ({ className = "" }) => {
           <div>
             <h3 className="text-heading font-semibold mb-4 text-lg text-primary-300">Support</h3>
             <ul className="space-y-3 text-body text-neutral-300">
-              <li><Link to="/contact" className="hover:text-primary-300 transition-all duration-300">Contact Us</Link></li>
-              <li><Link to="/faqs" className="hover:text-primary-300 transition-all duration-300">FAQs</Link></li>
-              <li><Link to="/shipping" className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link></li>
-              <li><Link to="/refunds" className="hover:text-primary-300 transition-all duration-300">Refunds & Returns</Link></li>
-              <li><Link to="/care" className="hover:text-primary-300 transition-all duration-300">Flower Care</Link></li>
+              <li><Link to="/contact" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Contact Us</Link></li>
+              <li><Link to="/faqs" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">FAQs</Link></li>
+              <li><Link to="/shipping" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link></li>
+              <li><Link to="/refunds" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Refunds & Returns</Link></li>
+              <li><Link to="/care" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Flower Care</Link></li>
             </ul>
           </div>
         </div>
@@ -80,10 +80,10 @@ const Footer = ({ className = "" }) => {
               </div>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-neutral-400">
-              <Link to="/privacy" className="hover:text-primary-300 transition-all duration-300">Privacy Policy</Link>
-              <Link to="/shipping" className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link>
-              <Link to="/refunds" className="hover:text-primary-300 transition-all duration-300">Refunds</Link>
-              <Link to="/terms" className="hover:text-primary-300 transition-all duration-300">Terms of Service</Link>
+              <Link to="/privacy" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Privacy Policy</Link>
+              <Link to="/shipping" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link>
+              <Link to="/refunds" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Refunds</Link>
+              <Link to="/terms" onClick={scrollToTop} className="hover:text-primary-300 transition-all duration-300">Terms of Service</Link>
             </div>
           </div>
         </div>
