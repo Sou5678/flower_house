@@ -4,11 +4,16 @@ import PageHeader from '../components/PageHeader';
 
 const PrivacyPolicyPage = () => {
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <PageHeader 
-        title="Privacy Policy" 
-        subtitle="How we collect, use, and protect your personal information"
-      />
+    <>
+      <title>Privacy Policy - Apna Flar | Data Protection & Security | DPDP Act 2023 Compliant</title>
+      <meta name="description" content="Apna Flar privacy policy - Complete data protection, DPDP Act 2023 compliant, secure payment processing, data stored in India. Your privacy is our priority." />
+      <meta name="keywords" content="apna flar privacy policy, data protection, DPDP act compliant, secure payments, privacy rights, data security" />
+      
+      <div className="min-h-screen bg-white pt-20">
+        <PageHeader 
+          title="Privacy Policy" 
+          subtitle="Data Protection & Security | DPDP Act 2023 Compliant"
+        />
       
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="prose prose-lg max-w-none">
@@ -18,8 +23,9 @@ const PrivacyPolicyPage = () => {
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
               <h2 className="text-xl font-semibold text-blue-800 mb-3">Your Privacy Matters</h2>
               <p className="text-blue-700">
-                At Apna Flar, we are committed to protecting your privacy and ensuring the security of your personal information. 
-                This policy explains how we collect, use, and safeguard your data when you use our services.
+                At Apna Flar Private Limited, we are committed to protecting your privacy and ensuring the security of your personal information. 
+                This policy explains how we collect, use, and safeguard your data in compliance with Indian data protection laws including 
+                the Information Technology Act, 2000 and Digital Personal Data Protection Act, 2023.
               </p>
             </div>
             <p className="text-gray-600">
@@ -39,7 +45,7 @@ const PrivacyPolicyPage = () => {
                 <ul className="text-gray-600 space-y-1 ml-6">
                   <li>• <strong>Account Information:</strong> Name, email address, phone number, password</li>
                   <li>• <strong>Delivery Information:</strong> Recipient names, addresses, delivery instructions</li>
-                  <li>• <strong>Payment Information:</strong> Credit card details, billing address (processed securely)</li>
+                  <li>• <strong>Payment Information:</strong> Credit card details, UPI ID, billing address (processed securely via Razorpay)</li>
                   <li>• <strong>Communication Data:</strong> Messages, reviews, customer service interactions</li>
                   <li>• <strong>Preferences:</strong> Flower preferences, occasion reminders, marketing preferences</li>
                 </ul>
@@ -60,7 +66,7 @@ const PrivacyPolicyPage = () => {
                 <h3 className="text-lg font-medium text-gray-800 mb-3">Information from Third Parties</h3>
                 <p className="text-gray-600 mb-3">We may receive information from:</p>
                 <ul className="text-gray-600 space-y-1 ml-6">
-                  <li>• <strong>Payment Processors:</strong> Transaction verification and fraud prevention</li>
+                  <li>• <strong>Payment Processors:</strong> Razorpay for secure payment processing and fraud prevention</li>
                   <li>• <strong>Delivery Partners:</strong> Delivery status and confirmation</li>
                   <li>• <strong>Social Media:</strong> If you connect your social accounts (optional)</li>
                   <li>• <strong>Marketing Partners:</strong> Aggregated demographic and interest data</li>
@@ -299,17 +305,22 @@ const PrivacyPolicyPage = () => {
             </div>
           </section>
 
-          {/* International Users */}
+          {/* Data Localization */}
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">International Users</h2>
-            <p className="text-gray-600 mb-4">
-              If you are accessing our services from outside the United States, please note that your information 
-              may be transferred to, stored, and processed in the United States where our servers are located.
-            </p>
-            <p className="text-gray-600">
-              By using our services, you consent to the transfer of your information to the United States and 
-              acknowledge that U.S. privacy laws may differ from those in your country.
-            </p>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Data Localization & Compliance</h2>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h3 className="font-medium text-blue-800 mb-2">India Data Protection Compliance</h3>
+              <p className="text-blue-700 mb-4">
+                All personal data of Indian users is stored and processed within India in compliance with Indian data protection laws. 
+                We maintain data centers in India and ensure that sensitive personal data does not leave Indian jurisdiction without explicit consent.
+              </p>
+              <ul className="text-blue-700 space-y-1 text-sm">
+                <li>• Data stored in Indian data centers</li>
+                <li>• Compliance with RBI guidelines for payment data</li>
+                <li>• Adherence to Digital Personal Data Protection Act, 2023</li>
+                <li>• Regular security audits and compliance checks</li>
+              </ul>
+            </div>
           </section>
 
           {/* Contact & Updates */}
@@ -321,8 +332,9 @@ const PrivacyPolicyPage = () => {
               </p>
               <div className="space-y-2">
                 <p><strong>Email:</strong> <a href="mailto:privacy@apnaflar.com" className="text-rose-600 hover:text-rose-700">privacy@apnaflar.com</a></p>
-                <p><strong>Phone:</strong> <a href="tel:+15551234567" className="text-rose-600 hover:text-rose-700">+1 (555) 123-4567</a></p>
-                <p><strong>Mail:</strong> Apna Flar Privacy Team, 123 Flower Street, Garden City, GC 12345</p>
+                <p><strong>Phone:</strong> <a href="tel:+919876543210" className="text-rose-600 hover:text-rose-700">+91 98765 43210</a></p>
+                <p><strong>Address:</strong> Apna Flar Pvt Ltd, Data Protection Officer, 123 Business Park, Sector 18, Gurugram, Haryana 122015</p>
+                <p><strong>CIN:</strong> U74999HR2024PTC123456</p>
               </div>
             </div>
 
@@ -342,6 +354,7 @@ const PrivacyPolicyPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

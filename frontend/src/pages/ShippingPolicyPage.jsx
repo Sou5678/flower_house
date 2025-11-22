@@ -4,30 +4,40 @@ import PageHeader from '../components/PageHeader';
 
 const ShippingPolicyPage = () => {
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <PageHeader 
-        title="Shipping Policy" 
-        subtitle="Everything you need to know about our delivery services"
-      />
+    <>
+      <title>Shipping Policy - Apna Flar | Pan India Delivery | Same Day & Express Delivery</title>
+      <meta name="description" content="Apna Flar shipping policy - Pan India delivery, same day delivery in major cities, express delivery options. Free shipping on orders above ₹1,999. 25,000+ PIN codes covered." />
+      <meta name="keywords" content="apna flar shipping, pan india delivery, same day flower delivery, express delivery, free shipping, delivery policy" />
+      
+      <div className="min-h-screen bg-white pt-20">
+        <PageHeader 
+          title="Shipping & Delivery Policy" 
+          subtitle="Pan India Delivery | Same Day & Express Options Available"
+        />
       
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="prose prose-lg max-w-none">
           
           {/* Delivery Areas */}
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Delivery Areas</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Delivery Coverage</h2>
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-medium text-green-800 mb-3">We Deliver To:</h3>
+              <h3 className="text-lg font-medium text-green-800 mb-3">Pan India Delivery Available:</h3>
               <ul className="text-green-700 space-y-2">
-                <li>• All major cities and metropolitan areas</li>
-                <li>• Suburban areas within 50 miles of city centers</li>
-                <li>• Selected rural areas (additional charges may apply)</li>
-                <li>• Hospitals, funeral homes, and event venues</li>
+                <li>• All major cities: Delhi, Mumbai, Bangalore, Chennai, Kolkata, Hyderabad, Pune, Ahmedabad</li>
+                <li>• Tier 2 cities: Jaipur, Lucknow, Kanpur, Nagpur, Indore, Bhopal, Visakhapatnam, Patna</li>
+                <li>• Tier 3 cities and towns (delivery within 2-3 days)</li>
+                <li>• Remote areas (delivery within 3-5 days, additional charges may apply)</li>
+                <li>• Special locations: Hospitals, corporate offices, event venues, hotels</li>
               </ul>
             </div>
-            <p className="text-gray-600">
-              Enter your ZIP code at checkout to confirm delivery availability and see exact delivery times for your area.
-            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+              <p className="text-blue-800 font-medium mb-2">✓ Coverage Details:</p>
+              <p className="text-blue-700 text-sm">
+                Enter your PIN code at checkout to confirm delivery availability and see exact delivery times for your area. 
+                We cover 25,000+ PIN codes across India with our network of local florists and delivery partners.
+              </p>
+            </div>
           </section>
 
           {/* Delivery Options */}
@@ -40,9 +50,9 @@ const ShippingPolicyPage = () => {
                 <p className="text-gray-600 mb-3">Perfect for last-minute occasions</p>
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• Order by 2:00 PM for same-day delivery</li>
-                  <li>• Available Monday-Saturday</li>
-                  <li>• Delivery between 12:00 PM - 8:00 PM</li>
-                  <li>• Additional $15 fee</li>
+                  <li>• Available in major cities only</li>
+                  <li>• Delivery between 4:00 PM - 10:00 PM</li>
+                  <li>• Additional ₹299 fee</li>
                 </ul>
               </div>
 
@@ -50,10 +60,10 @@ const ShippingPolicyPage = () => {
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Next-Day Delivery</h3>
                 <p className="text-gray-600 mb-3">Our most popular option</p>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Order by 6:00 PM for next-day delivery</li>
+                  <li>• Order by 8:00 PM for next-day delivery</li>
                   <li>• Available 7 days a week</li>
-                  <li>• Delivery between 9:00 AM - 6:00 PM</li>
-                  <li>• Free on orders over $75</li>
+                  <li>• Delivery between 10:00 AM - 8:00 PM</li>
+                  <li>• Free on orders over ₹1,999</li>
                 </ul>
               </div>
 
@@ -63,7 +73,7 @@ const ShippingPolicyPage = () => {
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• Choose your preferred date up to 30 days ahead</li>
                   <li>• Available 7 days a week</li>
-                  <li>• 2-hour delivery windows available</li>
+                  <li>• 3-hour delivery windows available</li>
                   <li>• Standard delivery fee applies</li>
                 </ul>
               </div>
@@ -73,9 +83,9 @@ const ShippingPolicyPage = () => {
                 <p className="text-gray-600 mb-3">For urgent deliveries</p>
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• 2-4 hour delivery window</li>
-                  <li>• Available Monday-Friday until 4:00 PM</li>
+                  <li>• Available Monday-Saturday until 6:00 PM</li>
                   <li>• Real-time tracking included</li>
-                  <li>• Additional $25 fee</li>
+                  <li>• Additional ₹599 fee</li>
                 </ul>
               </div>
             </div>
@@ -96,22 +106,22 @@ const ShippingPolicyPage = () => {
                 <tbody>
                   <tr>
                     <td className="border border-gray-300 px-4 py-3">Standard Delivery</td>
-                    <td className="border border-gray-300 px-4 py-3">$12.99</td>
-                    <td className="border border-gray-300 px-4 py-3">Orders over $75</td>
+                    <td className="border border-gray-300 px-4 py-3">₹149</td>
+                    <td className="border border-gray-300 px-4 py-3">Orders over ₹1,999</td>
                   </tr>
                   <tr className="bg-gray-50">
                     <td className="border border-gray-300 px-4 py-3">Same-Day Delivery</td>
-                    <td className="border border-gray-300 px-4 py-3">$27.99</td>
-                    <td className="border border-gray-300 px-4 py-3">Orders over $150</td>
+                    <td className="border border-gray-300 px-4 py-3">₹299</td>
+                    <td className="border border-gray-300 px-4 py-3">Orders over ₹3,999</td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-4 py-3">Express Delivery</td>
-                    <td className="border border-gray-300 px-4 py-3">$37.99</td>
-                    <td className="border border-gray-300 px-4 py-3">Orders over $200</td>
+                    <td className="border border-gray-300 px-4 py-3">₹599</td>
+                    <td className="border border-gray-300 px-4 py-3">Orders over ₹4,999</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3">Rural Areas</td>
-                    <td className="border border-gray-300 px-4 py-3">+$10.00</td>
+                    <td className="border border-gray-300 px-4 py-3">Remote Areas</td>
+                    <td className="border border-gray-300 px-4 py-3">+₹99</td>
                     <td className="border border-gray-300 px-4 py-3">No free threshold</td>
                   </tr>
                 </tbody>
@@ -195,9 +205,10 @@ const ShippingPolicyPage = () => {
                 Our customer service team is here to help with any delivery questions or special requests.
               </p>
               <div className="space-y-2">
-                <p><strong>Phone:</strong> <a href="tel:+15551234567" className="text-rose-600 hover:text-rose-700">+1 (555) 123-4567</a></p>
+                <p><strong>Phone:</strong> <a href="tel:+919876543210" className="text-rose-600 hover:text-rose-700">+91 98765 43210</a></p>
+                <p><strong>WhatsApp:</strong> <a href="https://wa.me/919876543210" className="text-rose-600 hover:text-rose-700">+91 98765 43210</a></p>
                 <p><strong>Email:</strong> <a href="mailto:delivery@apnaflar.com" className="text-rose-600 hover:text-rose-700">delivery@apnaflar.com</a></p>
-                <p><strong>Hours:</strong> Monday-Friday 8 AM - 8 PM, Saturday-Sunday 9 AM - 6 PM</p>
+                <p><strong>Hours:</strong> 24/7 Customer Support Available</p>
               </div>
             </div>
           </section>
@@ -209,6 +220,7 @@ const ShippingPolicyPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

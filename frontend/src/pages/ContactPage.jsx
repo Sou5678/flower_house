@@ -46,11 +46,16 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <PageHeader 
-        title="Contact Us" 
-        subtitle="We'd love to hear from you. Get in touch with our team."
-      />
+    <>
+      <title>Contact Us - Apna Flar | 24/7 Customer Support | Fresh Flower Delivery</title>
+      <meta name="description" content="Contact Apna Flar for fresh flower delivery support. 24/7 customer service, WhatsApp support +91 98765 43210. Get help with orders, delivery, and custom arrangements." />
+      <meta name="keywords" content="contact apna flar, customer support, flower delivery help, order support, fresh flowers contact" />
+      
+      <div className="min-h-screen bg-white pt-20">
+        <PageHeader 
+          title="Contact Us" 
+          subtitle="24/7 Customer Support for All Your Floral Needs"
+        />
       
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -71,9 +76,9 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
-                  <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM, Sat 9AM-4PM</p>
+                  <h3 className="font-semibold text-gray-800">Customer Support</h3>
+                  <p className="text-gray-600">+91 98765 43210</p>
+                  <p className="text-sm text-gray-500">Available 24/7 for urgent orders</p>
                 </div>
               </div>
 
@@ -85,9 +90,9 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">Email</h3>
-                  <p className="text-gray-600">hello@apnaflar.com</p>
-                  <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                  <h3 className="font-semibold text-gray-800">Email Support</h3>
+                  <p className="text-gray-600">support@apnaflar.com</p>
+                  <p className="text-sm text-gray-500">Response within 2-4 hours</p>
                 </div>
               </div>
 
@@ -100,28 +105,36 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">Visit Our Store</h3>
-                  <p className="text-gray-600">123 Flower Street<br />Garden City, GC 12345</p>
-                  <p className="text-sm text-gray-500">Open daily 8AM-7PM</p>
+                  <h3 className="font-semibold text-gray-800">Business Address</h3>
+                  <p className="text-gray-600">Apna Flar Pvt Ltd<br />123 Business Park, Sector 18<br />Gurugram, Haryana 122015</p>
+                  <p className="text-sm text-gray-500">Registered Office Address</p>
                 </div>
               </div>
             </div>
 
-            {/* Business Hours */}
+            {/* Business Information */}
             <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold text-gray-800 mb-4">Business Hours</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="text-gray-800">9:00 AM - 6:00 PM</span>
+              <h3 className="font-semibold text-gray-800 mb-4">Business Information</h3>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="font-medium text-gray-700">Company:</span>
+                  <span className="text-gray-600 ml-2">Apna Flar Private Limited</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="text-gray-800">9:00 AM - 4:00 PM</span>
+                <div>
+                  <span className="font-medium text-gray-700">CIN:</span>
+                  <span className="text-gray-600 ml-2">U74999HR2024PTC123456</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="text-gray-800">10:00 AM - 3:00 PM</span>
+                <div>
+                  <span className="font-medium text-gray-700">GSTIN:</span>
+                  <span className="text-gray-600 ml-2">06ABCDE1234F1Z5</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Support Hours:</span>
+                  <span className="text-gray-600 ml-2">24/7 Customer Support</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Delivery:</span>
+                  <span className="text-gray-600 ml-2">Pan India Delivery Available</span>
                 </div>
               </div>
             </div>
@@ -189,7 +202,7 @@ const ContactPage = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
-                  placeholder="(555) 123-4567"
+                  placeholder="+91 98765 43210"
                 />
               </div>
 
@@ -206,12 +219,16 @@ const ContactPage = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
                 >
                   <option value="">Select a subject</option>
-                  <option value="general">General Inquiry</option>
-                  <option value="order">Order Support</option>
-                  <option value="custom">Custom Arrangements</option>
-                  <option value="delivery">Delivery Questions</option>
-                  <option value="complaint">Complaint</option>
-                  <option value="compliment">Compliment</option>
+                  <option value="order-support">Order Support & Tracking</option>
+                  <option value="delivery-inquiry">Delivery Inquiry</option>
+                  <option value="payment-issue">Payment & Billing Issue</option>
+                  <option value="custom-arrangement">Custom Flower Arrangements</option>
+                  <option value="bulk-order">Bulk/Corporate Orders</option>
+                  <option value="refund-request">Refund & Cancellation</option>
+                  <option value="quality-concern">Quality Concern</option>
+                  <option value="partnership">Business Partnership</option>
+                  <option value="feedback">Feedback & Suggestions</option>
+                  <option value="other">Other Inquiry</option>
                 </select>
               </div>
 
@@ -243,6 +260,7 @@ const ContactPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -4,11 +4,16 @@ import PageHeader from '../components/PageHeader';
 
 const RefundPolicyPage = () => {
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <PageHeader 
-        title="Cancellations & Refunds" 
-        subtitle="Our commitment to your satisfaction and our fair return policy"
-      />
+    <>
+      <title>Refund & Cancellation Policy - Apna Flar | 100% Satisfaction Guarantee</title>
+      <meta name="description" content="Apna Flar refund policy - 100% satisfaction guarantee, easy cancellation process, instant refunds to UPI/wallets. Fair and transparent return policy for fresh flowers." />
+      <meta name="keywords" content="apna flar refund, cancellation policy, return policy, satisfaction guarantee, instant refund, flower return" />
+      
+      <div className="min-h-screen bg-white pt-20">
+        <PageHeader 
+          title="Refund & Cancellation Policy" 
+          subtitle="100% Satisfaction Guarantee | Easy Returns & Instant Refunds"
+        />
       
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="prose prose-lg max-w-none">
@@ -35,9 +40,10 @@ const RefundPolicyPage = () => {
                   Orders can be cancelled for a full refund if cancelled before we begin processing:
                 </p>
                 <ul className="text-gray-600 space-y-1 ml-4">
-                  <li>• Same-day orders: Cancel within 1 hour of placing order</li>
-                  <li>• Next-day orders: Cancel by 6:00 PM the day before delivery</li>
+                  <li>• Same-day orders: Cancel within 2 hours of placing order</li>
+                  <li>• Next-day orders: Cancel by 8:00 PM the day before delivery</li>
                   <li>• Scheduled orders: Cancel up to 24 hours before delivery date</li>
+                  <li>• Subscription orders: Cancel anytime before next delivery</li>
                 </ul>
               </div>
 
@@ -166,19 +172,24 @@ const RefundPolicyPage = () => {
                   <tr>
                     <td className="border border-gray-300 px-4 py-3">Credit/Debit Card</td>
                     <td className="border border-gray-300 px-4 py-3">Original card</td>
-                    <td className="border border-gray-300 px-4 py-3">3-5 business days</td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3">PayPal</td>
-                    <td className="border border-gray-300 px-4 py-3">PayPal account</td>
-                    <td className="border border-gray-300 px-4 py-3">1-2 business days</td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3">Bank Transfer</td>
-                    <td className="border border-gray-300 px-4 py-3">Original account</td>
                     <td className="border border-gray-300 px-4 py-3">5-7 business days</td>
                   </tr>
                   <tr className="bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-3">UPI/Digital Wallets</td>
+                    <td className="border border-gray-300 px-4 py-3">Original payment method</td>
+                    <td className="border border-gray-300 px-4 py-3">1-3 business days</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-3">Net Banking</td>
+                    <td className="border border-gray-300 px-4 py-3">Original bank account</td>
+                    <td className="border border-gray-300 px-4 py-3">5-7 business days</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-3">Razorpay Wallet</td>
+                    <td className="border border-gray-300 px-4 py-3">Wallet balance</td>
+                    <td className="border border-gray-300 px-4 py-3">Instant</td>
+                  </tr>
+                  <tr>
                     <td className="border border-gray-300 px-4 py-3">Store Credit</td>
                     <td className="border border-gray-300 px-4 py-3">Account balance</td>
                     <td className="border border-gray-300 px-4 py-3">Immediate</td>
@@ -187,9 +198,16 @@ const RefundPolicyPage = () => {
               </table>
             </div>
             
-            <p className="text-sm text-gray-600 mt-4">
-              * Refund timing may vary depending on your bank or payment provider's processing times.
-            </p>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
+              <p className="text-yellow-800 font-medium mb-2">Important Notes:</p>
+              <ul className="text-yellow-700 text-sm space-y-1">
+                <li>• Refund timing may vary depending on your bank or payment provider's processing times</li>
+                <li>• All refunds are processed through Razorpay's secure payment gateway</li>
+                <li>• You will receive SMS and email confirmation once refund is initiated</li>
+                <li>• For UPI refunds, amount is credited instantly to your UPI ID</li>
+                <li>• Credit card refunds may take 5-7 working days to reflect in your statement</li>
+              </ul>
+            </div>
           </section>
 
           {/* Special Circumstances */}
@@ -238,24 +256,24 @@ const RefundPolicyPage = () => {
                 <div>
                   <h4 className="font-medium text-gray-800 mb-2">Phone Support</h4>
                   <p className="text-sm text-gray-600">
-                    <a href="tel:+15551234567" className="text-rose-600 hover:text-rose-700">+1 (555) 123-4567</a><br />
-                    Mon-Fri: 8 AM - 8 PM<br />
-                    Sat-Sun: 9 AM - 6 PM
+                    <a href="tel:+919876543210" className="text-rose-600 hover:text-rose-700">+91 98765 43210</a><br />
+                    24/7 Customer Support<br />
+                    Toll-free support
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-800 mb-2">Email Support</h4>
+                  <h4 className="font-medium text-gray-800 mb-2">WhatsApp & Email</h4>
                   <p className="text-sm text-gray-600">
+                    <a href="https://wa.me/919876543210" className="text-rose-600 hover:text-rose-700">WhatsApp: +91 98765 43210</a><br />
                     <a href="mailto:support@apnaflar.com" className="text-rose-600 hover:text-rose-700">support@apnaflar.com</a><br />
-                    Response within 24 hours<br />
-                    Include order number
+                    Response within 2-4 hours
                   </p>
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-800 mb-2">Live Chat</h4>
                   <p className="text-sm text-gray-600">
                     Available on our website<br />
-                    Mon-Fri: 9 AM - 6 PM<br />
+                    24/7 Live Chat Support<br />
                     Instant assistance
                   </p>
                 </div>
@@ -270,6 +288,7 @@ const RefundPolicyPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

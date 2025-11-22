@@ -3,6 +3,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = ({ className = "" }) => {
+  // Function to scroll to top when clicking footer links
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
   return (
     <footer className={`bg-gradient-to-br from-neutral-800 to-neutral-900 text-white py-12 px-4 mt-16 ${className}`}>
       <div className="max-w-6xl mx-auto">
@@ -10,11 +17,12 @@ const Footer = ({ className = "" }) => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <h3 className="text-display text-2xl font-semibold mb-4">
-              <span className="text-primary-400">Amour</span>
-              <span className="text-script text-3xl ml-1">Florals</span>
+              <span className="text-primary-400">Apna</span>
+              <span className="text-script text-3xl ml-1">Flar</span>
             </h3>
             <p className="text-body text-neutral-300 max-w-md mb-6">
-              Where every petal tells a story. Creating timeless floral arrangements that capture emotions and create lasting memories for every special moment in life.
+              India's trusted online florist delivering fresh flowers across 25,000+ PIN codes. 
+              Same day delivery, 100% satisfaction guarantee, and 24/7 customer support.
             </p>
             
             {/* Social Media */}
@@ -66,9 +74,10 @@ const Footer = ({ className = "" }) => {
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-gray-400 text-sm">
-                &copy; 2024 Amour Florals. All Rights Reserved.
-              </p>
+              <div className="text-gray-400 text-sm">
+                <p>&copy; 2024 Apna Flar Private Limited. All Rights Reserved.</p>
+                <p className="mt-1">CIN: U74999HR2024PTC123456 | GSTIN: 06ABCDE1234F1Z5</p>
+              </div>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-neutral-400">
               <Link to="/privacy" className="hover:text-primary-300 transition-all duration-300">Privacy Policy</Link>

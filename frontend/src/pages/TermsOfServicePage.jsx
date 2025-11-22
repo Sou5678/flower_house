@@ -1,149 +1,337 @@
-// pages/TermsOfServicePage.jsx
+// src/pages/TermsOfServicePage.jsx
 import React from 'react';
-import Footer from '../components/Footer';
 import PageHeader from '../components/PageHeader';
 
 const TermsOfServicePage = () => {
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <PageHeader
-        title="Terms of Service"
-        subtitle="Terms and conditions for using our services"
-      />
+    <>
+      <title>Terms of Service - Apna Flar | User Agreement | Legal Terms & Conditions</title>
+      <meta name="description" content="Apna Flar Terms of Service - User agreement, legal terms and conditions for using our flower delivery platform. Read our complete terms before placing orders." />
+      <meta name="keywords" content="apna flar terms, terms of service, user agreement, legal terms, terms and conditions, flower delivery terms" />
       
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="prose prose-lg max-w-none">
-          <div className="mb-8">
-            <p className="text-gray-600 mb-6">
-              <strong>Last updated:</strong> November 21, 2024
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Welcome to Amour Florals. These Terms of Service ("Terms") govern your use of our website and services. By accessing or using our services, you agree to be bound by these Terms.
-            </p>
-          </div>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Acceptance of Terms</h2>
-            <p className="text-gray-700">
-              By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Products and Services</h2>
+      <div className="min-h-screen bg-white pt-20">
+        <PageHeader 
+          title="Terms of Service" 
+          subtitle="User Agreement & Legal Terms for Using Apna Flar Services"
+        />
+        
+        <div className="max-w-4xl mx-auto px-4 py-16">
+          <div className="prose prose-lg max-w-none">
             
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Product Descriptions</h3>
-            <p className="text-gray-700 mb-4">
-              We strive to provide accurate descriptions and images of our floral arrangements. However, due to the natural variation in flowers and seasonal availability, actual products may vary slightly from images shown.
-            </p>
+            {/* Introduction */}
+            <section className="mb-12">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                <h2 className="text-xl font-semibold text-blue-800 mb-3">Agreement to Terms</h2>
+                <p className="text-blue-700">
+                  By accessing and using Apna Flar's website and services, you agree to be bound by these Terms of Service. 
+                  These terms constitute a legally binding agreement between you and Apna Flar Private Limited.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p><strong>Effective Date:</strong> November 2024</p>
+                  <p><strong>Last Updated:</strong> November 2024</p>
+                </div>
+                <div>
+                  <p><strong>Governing Law:</strong> Laws of India</p>
+                  <p><strong>Jurisdiction:</strong> Courts of Gurugram, Haryana</p>
+                </div>
+              </div>
+            </section>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Availability</h3>
-            <p className="text-gray-700 mb-4">
-              All products are subject to availability. We reserve the right to discontinue any product at any time. In case of unavailability, we will contact you to offer suitable alternatives.
-            </p>
-          </section>
+            {/* Company Information */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Company Information</h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-3">Legal Entity</h3>
+                    <ul className="text-gray-600 space-y-1 text-sm">
+                      <li><strong>Company Name:</strong> Apna Flar Private Limited</li>
+                      <li><strong>CIN:</strong> U74999HR2024PTC123456</li>
+                      <li><strong>GSTIN:</strong> 06ABCDE1234F1Z5</li>
+                      <li><strong>Registration:</strong> Registered under Companies Act, 2013</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-3">Registered Address</h3>
+                    <p className="text-gray-600 text-sm">
+                      Apna Flar Private Limited<br />
+                      123 Business Park, Sector 18<br />
+                      Gurugram, Haryana 122015<br />
+                      India
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Orders and Payment</h2>
-            
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Order Acceptance</h3>
-            <p className="text-gray-700 mb-4">
-              Your receipt of an electronic or other form of order confirmation does not signify our acceptance of your order. We reserve the right to accept or decline your order for any reason.
-            </p>
+            {/* Service Description */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Our Services</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">What We Provide</h3>
+                  <ul className="text-gray-600 space-y-2 ml-6">
+                    <li>• Online flower ordering and delivery platform</li>
+                    <li>• Fresh flower arrangements and bouquets</li>
+                    <li>• Same-day, next-day, and scheduled delivery services</li>
+                    <li>• Custom floral arrangements for special occasions</li>
+                    <li>• Corporate and bulk flower orders</li>
+                    <li>• Customer support and order tracking</li>
+                  </ul>
+                </div>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Pricing</h3>
-            <ul className="list-disc pl-6 text-gray-700 mb-4 space-y-2">
-              <li>All prices are in USD and subject to change without notice</li>
-              <li>Delivery charges are additional and will be calculated at checkout</li>
-              <li>We reserve the right to correct pricing errors</li>
-            </ul>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Service Areas</h3>
+                  <p className="text-gray-600">
+                    We provide delivery services across India covering 25,000+ PIN codes through our network of 
+                    local florists and delivery partners. Service availability may vary by location.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Payment</h3>
-            <p className="text-gray-700 mb-4">
-              Payment is required at the time of order placement. We accept major credit cards and other payment methods as displayed on our website.
-            </p>
-          </section>
+            {/* User Responsibilities */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">User Responsibilities</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-green-800 mb-3">✓ You Must:</h3>
+                  <ul className="text-green-700 space-y-2 text-sm">
+                    <li>• Provide accurate and complete information</li>
+                    <li>• Use the service for lawful purposes only</li>
+                    <li>• Maintain the security of your account</li>
+                    <li>• Pay for orders in full and on time</li>
+                    <li>• Provide correct delivery addresses</li>
+                    <li>• Respect intellectual property rights</li>
+                    <li>• Comply with all applicable laws</li>
+                  </ul>
+                </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Delivery</h2>
-            
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Delivery Areas</h3>
-            <p className="text-gray-700 mb-4">
-              We deliver within specified areas as indicated on our website. Delivery charges vary by location and will be displayed at checkout.
-            </p>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-red-800 mb-3">✗ You Must Not:</h3>
+                  <ul className="text-red-700 space-y-2 text-sm">
+                    <li>• Use false or misleading information</li>
+                    <li>• Attempt to hack or disrupt our systems</li>
+                    <li>• Share your account with others</li>
+                    <li>• Use the service for illegal activities</li>
+                    <li>• Violate any third-party rights</li>
+                    <li>• Post harmful or offensive content</li>
+                    <li>• Attempt payment fraud or chargebacks</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Delivery Times</h3>
-            <ul className="list-disc pl-6 text-gray-700 mb-4 space-y-2">
-              <li>Same-day delivery available for orders placed before 2 PM</li>
-              <li>Delivery times are estimates and may vary due to weather or other circumstances</li>
-              <li>We will attempt delivery during business hours unless otherwise specified</li>
-            </ul>
+            {/* Orders and Payments */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Orders & Payments</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Order Process</h3>
+                  <ol className="text-gray-600 space-y-2 ml-6 list-decimal">
+                    <li>Browse and select products from our catalog</li>
+                    <li>Add items to cart and proceed to checkout</li>
+                    <li>Provide delivery details and select delivery date/time</li>
+                    <li>Choose payment method and complete payment</li>
+                    <li>Receive order confirmation via SMS and email</li>
+                    <li>Track your order through our platform</li>
+                  </ol>
+                </div>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Delivery Issues</h3>
-            <p className="text-gray-700 mb-4">
-              If the recipient is not available, we may leave the arrangement in a safe location or with a neighbor. We are not responsible for arrangements left unattended at the recipient's request.
-            </p>
-          </section>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Payment Terms</h3>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <ul className="text-yellow-800 space-y-1 text-sm">
+                      <li>• All payments must be made in full before delivery</li>
+                      <li>• We accept credit cards, debit cards, UPI, net banking, and digital wallets</li>
+                      <li>• Payments are processed securely through Razorpay</li>
+                      <li>• Prices include applicable taxes (GST)</li>
+                      <li>• Delivery charges are additional unless specified otherwise</li>
+                      <li>• Failed payments will result in order cancellation</li>
+                    </ul>
+                  </div>
+                </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Returns and Refunds</h2>
-            
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Satisfaction Guarantee</h3>
-            <p className="text-gray-700 mb-4">
-              We stand behind the quality of our products. If you are not satisfied with your purchase, please contact us within 24 hours of delivery.
-            </p>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Order Modifications</h3>
+                  <p className="text-gray-600">
+                    Orders can be modified or cancelled within specific timeframes as outlined in our 
+                    Cancellation & Refund Policy. Once an order enters preparation, modifications may not be possible.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-            <h3 className="text-xl font-medium text-gray-800 mb-3">Refund Policy</h3>
-            <ul className="list-disc pl-6 text-gray-700 mb-4 space-y-2">
-              <li>Refunds may be issued for damaged or significantly different products</li>
-              <li>Custom arrangements are non-refundable unless damaged</li>
-              <li>Refunds will be processed to the original payment method</li>
-            </ul>
-          </section>
+            {/* Delivery Terms */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Delivery Terms</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Delivery Commitment</h3>
+                  <p className="text-gray-600 mb-3">
+                    We strive to deliver all orders within the promised timeframe. However, delivery times are estimates 
+                    and may be affected by factors beyond our control.
+                  </p>
+                  <ul className="text-gray-600 space-y-1 ml-6">
+                    <li>• Weather conditions and natural disasters</li>
+                    <li>• Traffic conditions and road closures</li>
+                    <li>• Recipient availability and address accuracy</li>
+                    <li>• Local restrictions and security protocols</li>
+                    <li>• Peak season demand and inventory availability</li>
+                  </ul>
+                </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">User Conduct</h2>
-            <p className="text-gray-700 mb-4">You agree not to:</p>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              <li>Use our services for any unlawful purpose</li>
-              <li>Interfere with or disrupt our services</li>
-              <li>Attempt to gain unauthorized access to our systems</li>
-              <li>Submit false or misleading information</li>
-            </ul>
-          </section>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Delivery Attempts</h3>
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <p className="text-gray-600">
+                      We make up to 3 delivery attempts. If delivery cannot be completed after 3 attempts due to 
+                      recipient unavailability or incorrect address, the order may be cancelled with applicable charges.
+                    </p>
+                  </div>
+                </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Limitation of Liability</h2>
-            <p className="text-gray-700">
-              Our liability is limited to the purchase price of the product. We are not liable for any indirect, incidental, or consequential damages arising from the use of our services.
-            </p>
-          </section>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Product Substitution</h3>
+                  <p className="text-gray-600">
+                    In case of unavailability of specific flowers or products, we reserve the right to substitute 
+                    with similar or higher value alternatives while maintaining the overall design and color scheme.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Changes to Terms</h2>
-            <p className="text-gray-700">
-              We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting on our website. Your continued use of our services constitutes acceptance of the modified Terms.
-            </p>
-          </section>
+            {/* Intellectual Property */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Intellectual Property</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Our Rights</h3>
+                  <p className="text-gray-600">
+                    All content on our platform including text, images, logos, designs, and software is owned by 
+                    Apna Flar Private Limited or our licensors and is protected by intellectual property laws.
+                  </p>
+                </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Contact Information</h2>
-            <p className="text-gray-700">
-              If you have any questions about these Terms of Service, please contact us:
-            </p>
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <p className="text-gray-700">
-                <strong>Email:</strong> legal@amourflorals.com<br />
-                <strong>Phone:</strong> (555) 123-4567<br />
-                <strong>Address:</strong> 123 Flower Street, Garden City, GC 12345
-              </p>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Your Rights</h3>
+                  <p className="text-gray-600">
+                    You retain ownership of any content you provide to us (reviews, photos, etc.) but grant us 
+                    a license to use such content for business purposes including marketing and promotion.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Limitation of Liability */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Limitation of Liability</h2>
+              
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                <h3 className="text-lg font-medium text-orange-800 mb-3">Important Legal Notice</h3>
+                <div className="text-orange-700 space-y-3 text-sm">
+                  <p>
+                    <strong>Maximum Liability:</strong> Our total liability for any claim related to our services 
+                    shall not exceed the amount paid by you for the specific order in question.
+                  </p>
+                  <p>
+                    <strong>Excluded Damages:</strong> We are not liable for indirect, incidental, special, 
+                    consequential, or punitive damages including but not limited to loss of profits, data, or business opportunities.
+                  </p>
+                  <p>
+                    <strong>Force Majeure:</strong> We are not liable for delays or failures due to circumstances 
+                    beyond our reasonable control including natural disasters, government actions, or technical failures.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Dispute Resolution */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Dispute Resolution</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Resolution Process</h3>
+                  <ol className="text-gray-600 space-y-2 ml-6 list-decimal">
+                    <li><strong>Direct Communication:</strong> Contact our customer support team first</li>
+                    <li><strong>Internal Review:</strong> We will investigate and attempt to resolve the issue</li>
+                    <li><strong>Mediation:</strong> If needed, we may engage in mediation</li>
+                    <li><strong>Legal Action:</strong> As a last resort, disputes will be resolved through Indian courts</li>
+                  </ol>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Jurisdiction</h3>
+                  <p className="text-gray-600">
+                    Any legal disputes arising from these terms or our services shall be subject to the exclusive 
+                    jurisdiction of the courts in Gurugram, Haryana, India.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Changes to Terms */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Changes to Terms</h2>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <h3 className="text-lg font-medium text-blue-800 mb-3">Updates and Modifications</h3>
+                <p className="text-blue-700 mb-3">
+                  We reserve the right to modify these terms at any time. Changes will be effective immediately 
+                  upon posting on our website.
+                </p>
+                <ul className="text-blue-700 space-y-1 text-sm">
+                  <li>• Significant changes will be communicated via email or website notice</li>
+                  <li>• Continued use of our services constitutes acceptance of updated terms</li>
+                  <li>• You should review these terms periodically</li>
+                  <li>• If you disagree with changes, you should discontinue using our services</li>
+                </ul>
+              </div>
+            </section>
+
+            {/* Contact Information */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <p className="text-gray-600 mb-4">
+                  For questions about these Terms of Service or any legal matters, please contact us:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">Legal Department</h4>
+                    <p className="text-sm text-gray-600">
+                      <strong>Email:</strong> <a href="mailto:legal@apnaflar.com" className="text-rose-600 hover:text-rose-700">legal@apnaflar.com</a><br />
+                      <strong>Phone:</strong> <a href="tel:+919876543210" className="text-rose-600 hover:text-rose-700">+91 98765 43210</a>
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-800 mb-2">Registered Office</h4>
+                    <p className="text-sm text-gray-600">
+                      Apna Flar Private Limited<br />
+                      123 Business Park, Sector 18<br />
+                      Gurugram, Haryana 122015<br />
+                      India
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="text-sm text-gray-500 border-t pt-6">
+              <p>Last updated: November 2024</p>
+              <p>These terms of service are governed by the laws of India and are subject to the jurisdiction of Gurugram courts.</p>
             </div>
-          </section>
+          </div>
         </div>
       </div>
-      
-      <Footer />
-    </div>
+    </>
   );
 };
 
