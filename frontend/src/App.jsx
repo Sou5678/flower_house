@@ -18,6 +18,9 @@ const SignUpPage = lazy(() => import('./pages/SignUpPage'));
 const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
 const FlowerCarePage = lazy(() => import('./pages/FlowerCarePage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const ShippingPolicyPage = lazy(() => import('./pages/ShippingPolicyPage'));
+const RefundPolicyPage = lazy(() => import('./pages/RefundPolicyPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsOfServicePage = lazy(() => import('./pages/TermsOfServicePage'));
 const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage'));
@@ -113,9 +116,12 @@ const AppContent = memo(() => {
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/faqs" element={<FAQPage />} />
                 <Route path="/care" element={<FlowerCarePage />} />
-                <Route path="/contact" element={<Contact />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/contact-old" element={<Contact />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+                <Route path="/shipping" element={<ShippingPolicyPage />} />
+                <Route path="/refunds" element={<RefundPolicyPage />} />
                 <Route path="/privacy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms" element={<TermsOfServicePage />} />
                 <Route path="/cookies" element={<CookiePolicyPage />} />

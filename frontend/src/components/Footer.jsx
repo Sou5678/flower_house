@@ -51,13 +51,13 @@ const Footer = ({ className = "" }) => {
 
           {/* Support Section */}
           <div>
-            <h3 className="font-medium mb-4 text-lg">Support</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li><Link to="/contact" className="hover:text-white transition duration-300">Contact Us</Link></li>
-              <li><Link to="/faqs" className="hover:text-white transition duration-300">FAQs</Link></li>
-              <li><Link to="/shipping" className="hover:text-white transition duration-300">Shipping Info</Link></li>
-              <li><Link to="/returns" className="hover:text-white transition duration-300">Returns</Link></li>
-              <li><Link to="/care" className="hover:text-white transition duration-300">Flower Care</Link></li>
+            <h3 className="text-heading font-semibold mb-4 text-lg text-primary-300">Support</h3>
+            <ul className="space-y-3 text-body text-neutral-300">
+              <li><Link to="/contact" className="hover:text-primary-300 transition-all duration-300">Contact Us</Link></li>
+              <li><Link to="/faqs" className="hover:text-primary-300 transition-all duration-300">FAQs</Link></li>
+              <li><Link to="/shipping" className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link></li>
+              <li><Link to="/refunds" className="hover:text-primary-300 transition-all duration-300">Refunds & Returns</Link></li>
+              <li><Link to="/care" className="hover:text-primary-300 transition-all duration-300">Flower Care</Link></li>
             </ul>
           </div>
         </div>
@@ -70,10 +70,11 @@ const Footer = ({ className = "" }) => {
                 &copy; 2024 Amour Florals. All Rights Reserved.
               </p>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-gray-400">
-              <Link to="/privacy" className="hover:text-white transition duration-300">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-white transition duration-300">Terms of Service</Link>
-              <Link to="/cookies" className="hover:text-white transition duration-300">Cookie Policy</Link>
+            <div className="flex flex-wrap gap-6 text-sm text-neutral-400">
+              <Link to="/privacy" className="hover:text-primary-300 transition-all duration-300">Privacy Policy</Link>
+              <Link to="/shipping" className="hover:text-primary-300 transition-all duration-300">Shipping Policy</Link>
+              <Link to="/refunds" className="hover:text-primary-300 transition-all duration-300">Refunds</Link>
+              <Link to="/terms" className="hover:text-primary-300 transition-all duration-300">Terms of Service</Link>
             </div>
           </div>
         </div>

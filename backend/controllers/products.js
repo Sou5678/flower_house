@@ -306,3 +306,66 @@ exports.getPopularProducts = async (req, res, next) => {
     });
   }
 };
+
+// @desc    Get suggested products
+// @route   GET /api/products/suggested
+// @access  Public
+exports.getSuggestedProducts = async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 8;
+    
+    // Get suggested products based on multiple criteria:
+    // 1. Popular products (isPopular: true)
+    // 2. High-rated products (ratings.average >= 4)
+    // 3. Recently added products
+    const suggestedProducts = await Product.aggregate([
+      {
+        $match: {
+          'inventory.isAvailable': true,
+          'inventory.stock': { $gt: 0 }
+        }
+      },
+      {
+        $addFields: {
+          suggestionScore: {
+            $add: [
+              { $cond: [{ $eq: ['$isPopular', true] }, 10, 0] },
+              { $cond: [{ $eq: ['$isFeatured', true] }, 5, 0] },
+              { $multiply: ['$ratings.average', 2] },
+              { $cond: [{ $gte: ['$ratings.count', 5] }, 3, 0] }
+            ]
+          }
+        }
+      },
+      { $sort: { suggestionScore: -1, 'ratings.average': -1, createdAt: -1 } },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category'
+        }
+      },
+      {
+        $unwind: {
+          path: '$category',
+          preserveNullAndEmptyArrays: true
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      count: suggestedProducts.length,
+      data: {
+        products: suggestedProducts
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};

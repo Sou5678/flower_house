@@ -10,7 +10,8 @@
     "build": "npm install",
     "create-admin": "node scripts/createAdmin.js",
     "reset-admin-password": "node scripts/resetAdminPassword.js",
-    "create-test-users": "node scripts/createTestUsers.js"
+    "create-test-users": "node scripts/createTestUsers.js",
+    "seed-products": "node scripts/seedProducts.js"
   },
   "keywords": [],
   "author": "",

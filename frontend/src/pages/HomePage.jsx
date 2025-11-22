@@ -4,6 +4,7 @@ import React, { lazy, Suspense, memo } from 'react';
 // Lazy load components for better performance
 const HeroSection = lazy(() => import('../components/HeroSection'));
 const FeaturedCollections = lazy(() => import('../components/FeaturedCollections'));
+const SuggestedProducts = lazy(() => import('../components/SuggestedProducts'));
 const Testimonials = lazy(() => import('../components/Testimonials'));
 const Newsletter = lazy(() => import('../components/Newsletter'));
 const Footer = lazy(() => import('../components/Footer'));
@@ -26,6 +27,10 @@ const HomePage = memo(() => {
       
       <Suspense fallback={<SectionLoader />}>
         <FeaturedCollections />
+      </Suspense>
+      
+      <Suspense fallback={<SectionLoader />}>
+        <SuggestedProducts />
       </Suspense>
       
       <Suspense fallback={<SectionLoader />}>
