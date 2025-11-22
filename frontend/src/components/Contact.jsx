@@ -21,7 +21,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here (connect to your backend)
-    console.log('Form submitted:', formData);
+    // TODO: Implement contact form API call
     // Reset form after submission
     setFormData({
       fullName: '',
@@ -33,7 +33,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white pt-20">
       {/* Contact Section */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">

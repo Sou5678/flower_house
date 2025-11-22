@@ -22,12 +22,23 @@ class EmailService {
     await this.sendEmail(mailOptions);
   }
 
-  async sendOrderConfirmation(order, user) {
+  async sendOrderConfirmation(user, order) {
     const mailOptions = {
       from: process.env.EMAIL_FROM,
       to: user.email,
       subject: `Order Confirmation - ${order.orderNumber}`,
-      html: this.getOrderConfirmationTemplate(order, user)
+      html: this.getOrderConfirmationTemplate(user, order)
+    };
+
+    await this.sendEmail(mailOptions);
+  }
+
+  async sendPaymentFailureNotification(user, order) {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: user.email,
+      subject: `Payment Failed - ${order.orderNumber}`,
+      html: this.getPaymentFailureTemplate(user, order)
     };
 
     await this.sendEmail(mailOptions);
@@ -125,6 +136,38 @@ class EmailService {
                 <strong>Total: $${order.total.toFixed(2)}</strong>
               </div>
             </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  getPaymentFailureTemplate(user, order) {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: #ef4444; color: white; padding: 30px; text-align: center; }
+          .content { padding: 20px; }
+          .button { background: #ec4899; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Payment Failed</h1>
+            <p>Order #${order.orderNumber}</p>
+          </div>
+          <div class="content">
+            <h2>Hello ${user.fullName},</h2>
+            <p>Unfortunately, we were unable to process your payment for order #${order.orderNumber}.</p>
+            <p>Please try again or contact our support team for assistance.</p>
+            <a href="${process.env.FRONTEND_URL}/orders/${order._id}" class="button">Retry Payment</a>
+            <p>Thank you for choosing Amour Florals!</p>
           </div>
         </div>
       </body>

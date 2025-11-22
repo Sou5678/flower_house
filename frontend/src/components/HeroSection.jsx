@@ -3,17 +3,30 @@ import React from 'react';
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-br from-pink-50 to-rose-50 py-20 px-4">
-      <div className="max-w-6xl mx-auto text-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-gray-800 mb-6 leading-tight">
-          Where Flowers Become Art
+    <section className="bg-floral py-20 px-4 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-10 left-10 w-20 h-20 bg-primary-200 rounded-full opacity-20 animate-float"></div>
+      <div className="absolute bottom-20 right-20 w-16 h-16 bg-accent-200 rounded-full opacity-30 animate-float" style={{animationDelay: '1s'}}></div>
+      <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-secondary-200 rounded-full opacity-25 animate-pulse-soft"></div>
+      
+      <div className="max-w-6xl mx-auto text-center relative z-10">
+        <h1 className="text-display text-5xl md:text-7xl lg:text-8xl font-semibold text-neutral-800 mb-6 leading-tight animate-fade-in">
+          Where Flowers Become 
+          <span className="text-script text-6xl md:text-8xl lg:text-9xl text-primary-500 block mt-2">
+            Art
+          </span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Experience: The luxury of artfully crafted bouquets, designed to captivate and inspire.
+        <p className="text-body text-lg md:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+          Experience the luxury of artfully crafted bouquets, designed to captivate hearts and inspire souls with nature's finest beauty.
         </p>
-        <button className="bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 rounded-full font-medium transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-          Shop The Collection
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
+          <button className="btn-primary text-lg px-8 py-4">
+            Shop The Collection
+          </button>
+          <button className="btn-outline text-lg px-8 py-4">
+            View Gallery
+          </button>
+        </div>
       </div>
     </section>
   );

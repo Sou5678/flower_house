@@ -15,21 +15,14 @@ const app = express();
 
 // 1. Helmet with safe configuration
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
+  contentSecurityPolicy: false, // Temporary disable for development
   crossOriginEmbedderPolicy: false
 }));
 
 // 2. Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // different limits for dev/prod
+  max: 1000, // Increased limit for development
   message: {
     error: 'Too many requests from this IP, please try again after 15 minutes'
   },
@@ -38,59 +31,35 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// 3. Body Parsing with limits
+// 3. CORS - Development ke liye allow all
+app.use(cors({
+  origin: true, // Allow all origins in development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
+// 4. Body Parsing
 app.use(express.json({ 
-  limit: '10mb',
-  verify: (req, res, buf) => {
-    req.rawBody = buf;
-  }
+  limit: '10mb'
 }));
 app.use(express.urlencoded({ 
   extended: true, 
   limit: '10mb' 
 }));
 
-// 4. HTTP Parameter Pollution protection
+// 5. HTTP Parameter Pollution protection
 app.use(hpp());
 
-// 5. Compression
+// 6. Compression
 app.use(compression());
-
-// 6. CORS with proper configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
-
-// 7. Custom Security Headers
-app.use((req, res, next) => {
-  // Remove X-Powered-By
-  res.removeHeader('X-Powered-By');
-  
-  // Additional security headers
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  
-  next();
-});
 
 // =====================
 // DATABASE CONNECTION
 // =====================
 
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
-  console.log('✅ MongoDB Connected Successfully');
-  console.log(`📊 Database: ${mongoose.connection.db.databaseName}`);
-})
-.catch(err => {
-  console.error('❌ MongoDB Connection Error:', err.message);
-  process.exit(1);
-});
+const connectDB = require('./config/database');
+connectDB();
 
 // =====================
 // ROUTES
@@ -98,6 +67,13 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/categories'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/payments', require('./routes/payments'));
+app.use('/api/admin', require('./routes/admin'));
 
 // =====================
 // HEALTH CHECK
@@ -113,12 +89,44 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Test route for signup
+app.post('/api/test/signup', async (req, res) => {
+  try {
+    const { fullName, email, password } = req.body;
+    
+    // Simple validation
+    if (!fullName || !email || !password) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide all required fields'
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Test signup successful',
+      data: {
+        user: {
+          fullName,
+          email,
+          id: 'test-user-id'
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+});
+
 // =====================
 // ERROR HANDLING
 // =====================
 
 // 404 Handler
-app.use( (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     message: `Route ${req.originalUrl} not found`
@@ -170,6 +178,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📍 Health Check: http://localhost:${PORT}/api/health`);
+  console.log(`📍 Test Signup: http://localhost:${PORT}/api/test/signup`);
 });
 
 module.exports = app;

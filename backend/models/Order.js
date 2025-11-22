@@ -71,9 +71,29 @@ const orderSchema = new mongoose.Schema({
     paymentId: String,
     status: {
       type: String,
-      enum: ['pending', 'completed', 'failed', 'refunded'],
+      enum: ['pending', 'completed', 'failed', 'refunded', 'partially_refunded'],
       default: 'pending'
     }
+  },
+  // Razorpay payment fields
+  razorpayOrderId: String,
+  razorpayPaymentId: String,
+  razorpaySignature: String,
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'completed', 'failed', 'refunded', 'partially_refunded'],
+    default: 'pending'
+  },
+  orderStatus: {
+    type: String,
+    enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'payment_failed', 'refunded'],
+    default: 'pending'
+  },
+  paidAt: Date,
+  refundedAt: Date,
+  refundAmount: {
+    type: Number,
+    default: 0
   },
   subtotal: {
     type: Number,
@@ -92,6 +112,10 @@ const orderSchema = new mongoose.Schema({
     default: 0
   },
   total: {
+    type: Number,
+    required: true
+  },
+  totalAmount: {
     type: Number,
     required: true
   },
