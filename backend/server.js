@@ -75,6 +75,25 @@ connectDB();
 // ROUTES
 // =====================
 
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Amour Florals API Server is running!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      products: '/api/products',
+      categories: '/api/categories',
+      documentation: 'https://github.com/Sou5678/flower_house'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -100,19 +119,7 @@ app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/order-management', require('./routes/orderManagement'));
 app.use('/api/location', require('./routes/location'));
 
-// =====================
-// HEALTH CHECK
-// =====================
 
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'Amour Florals Backend is running!',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  });
-});
 
 // Test route for signup
 app.post('/api/test/signup', async (req, res) => {
