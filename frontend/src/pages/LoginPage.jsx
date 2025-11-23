@@ -19,6 +19,11 @@ const LoginPage = () => {
   const [redirectDestination, setRedirectDestination] = useState('/profile');
 
   useEffect(() => {
+    // Clear any existing invalid auth data first
+    if (!authUtils.isAuthenticated()) {
+      authUtils.clearAuth();
+    }
+    
     // Restore authentication context if available
     const restoredContext = AuthErrorHandler.restoreContext();
     

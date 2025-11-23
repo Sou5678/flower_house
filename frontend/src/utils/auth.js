@@ -5,7 +5,33 @@ const USER_KEY = 'amourFloralsUser';
 export const authUtils = {
   // Check if user is authenticated
   isAuthenticated: () => {
-    return !!localStorage.getItem(TOKEN_KEY);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return false;
+    
+    try {
+      // Basic token format validation
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        // Invalid JWT format, clear it
+        authUtils.clearAuth();
+        return false;
+      }
+      
+      // Check if token is expired (basic check)
+      const payload = JSON.parse(atob(parts[1]));
+      if (payload.exp && payload.exp * 1000 < Date.now()) {
+        // Token expired, clear it
+        authUtils.clearAuth();
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      // Invalid token, clear it
+      console.warn('Invalid token found, clearing auth data');
+      authUtils.clearAuth();
+      return false;
+    }
   },
 
   // Get current auth token
@@ -35,6 +61,12 @@ export const authUtils = {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem('amourFloralsWishlist'); // Clear cached wishlist data
+    localStorage.removeItem('amourFloralsCart'); // Clear cart data
+    
+    // Dispatch auth cleared event
+    window.dispatchEvent(new CustomEvent('authCleared', {
+      detail: { timestamp: Date.now() }
+    }));
   },
 
   // Logout user with redirect

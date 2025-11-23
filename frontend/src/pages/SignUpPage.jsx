@@ -1,5 +1,5 @@
 // pages/SignUpPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API from '../utils/api';
@@ -17,6 +17,13 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  // Clear any existing invalid auth data on component mount
+  useEffect(() => {
+    if (!authUtils.isAuthenticated()) {
+      authUtils.clearAuth();
+    }
+  }, []);
 
   // Test API connection
   const testConnection = async () => {

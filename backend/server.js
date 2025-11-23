@@ -33,9 +33,14 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// 3. CORS - Development ke liye allow all
+// 3. CORS - Allow both localhost and production
 app.use(cors({
-  origin: true, // Allow all origins in development
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://bright-kitten-7dd374.netlify.app',
+    process.env.FRONTEND_URL
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
