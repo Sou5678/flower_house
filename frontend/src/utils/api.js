@@ -2,7 +2,7 @@
 import axios from 'axios';
 import authUtils from './auth';
 
-// ✅ CORRECT: Include /api in base URL with Render URL
+// ✅ CORRECT: Base URL without /api
 const API_URL = 'https://flower-house.onrender.com';
 
 // Authentication error types for better categorization
@@ -18,7 +18,6 @@ const AUTH_ERROR_TYPES = {
 // Enhanced authentication error handler
 class AuthErrorHandler {
   static preserveContext() {
-    // Preserve current location for redirect after login
     const currentPath = window.location.pathname;
     const currentSearch = window.location.search;
     const currentHash = window.location.hash;
@@ -27,24 +26,18 @@ class AuthErrorHandler {
       returnUrl: currentPath + currentSearch + currentHash,
       timestamp: Date.now(),
       userAgent: navigator.userAgent,
-      // Preserve any form data or user selections if available
       preservedState: this.extractPreservableState()
     };
     
     sessionStorage.setItem('authRedirectContext', JSON.stringify(contextData));
-    
-    // Also preserve in localStorage as backup (survives tab close)
     localStorage.setItem('authRedirectContext', JSON.stringify(contextData));
     
-
     return contextData;
   }
   
   static extractPreservableState() {
-    // Extract any preservable state from the current page
     const preservableState = {};
     
-    // Preserve wishlist selections if on wishlist page
     if (window.location.pathname === '/wishlist') {
       const selectedItems = document.querySelectorAll('[data-selected="true"]');
       if (selectedItems.length > 0) {
@@ -54,13 +47,11 @@ class AuthErrorHandler {
       }
     }
     
-    // Preserve cart items count
     const cartCount = localStorage.getItem('cartCount');
     if (cartCount) {
       preservableState.cartCount = cartCount;
     }
     
-    // Preserve any form data from input fields
     const formInputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
     const formData = {};
     formInputs.forEach(input => {
@@ -77,7 +68,6 @@ class AuthErrorHandler {
   }
   
   static restoreContext() {
-    // Try to restore context from sessionStorage first, then localStorage
     let contextData = null;
     
     try {
@@ -88,17 +78,12 @@ class AuthErrorHandler {
                    localContext ? JSON.parse(localContext) : null;
       
       if (contextData) {
-
-        
-        // Clean up stored context
         sessionStorage.removeItem('authRedirectContext');
         localStorage.removeItem('authRedirectContext');
-        
         return contextData;
       }
     } catch (error) {
       console.error('[AuthErrorHandler] Failed to restore context:', error);
-      // Clean up corrupted context data
       sessionStorage.removeItem('authRedirectContext');
       localStorage.removeItem('authRedirectContext');
     }
@@ -146,18 +131,9 @@ class AuthErrorHandler {
     const errorType = this.categorizeAuthError(error);
     const errorMessage = this.getErrorMessage(errorType);
     
-
-    
-    // Clean up authentication data
     this.clearAuthData();
-    
-    // Preserve context before redirect
     const context = this.preserveContext();
-    
-    // Show user-friendly error message
     this.showAuthErrorNotification(errorMessage);
-    
-    // Redirect to login with context
     this.redirectToLogin(context);
     
     return {
@@ -168,13 +144,10 @@ class AuthErrorHandler {
   }
   
   static clearAuthData() {
-    // Use centralized auth utility
     authUtils.clearAuth();
-
   }
   
   static showAuthErrorNotification(message) {
-    // Create a more user-friendly notification
     const notification = document.createElement('div');
     notification.className = 'auth-error-notification';
     notification.style.cssText = `
@@ -211,7 +184,6 @@ class AuthErrorHandler {
     
     document.body.appendChild(notification);
     
-    // Auto-remove notification after 5 seconds
     setTimeout(() => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
@@ -220,19 +192,15 @@ class AuthErrorHandler {
   }
   
   static redirectToLogin(context) {
-    // Small delay to allow user to read the notification
     setTimeout(() => {
       const loginUrl = '/login';
       
-      // Use React Router's navigation if available, otherwise fallback to window.location
       if (window.history && window.history.pushState) {
         window.history.pushState(
           { from: context?.returnUrl || window.location.pathname },
           '',
           loginUrl
         );
-        
-        // Dispatch a custom event to notify React Router
         window.dispatchEvent(new PopStateEvent('popstate'));
       } else {
         window.location.href = loginUrl;
@@ -241,27 +209,21 @@ class AuthErrorHandler {
   }
 }
 
-// ✅ CORRECT: Create axios instance WITHOUT baseURL
+// ✅ CORRECT: Create axios instance with baseURL that includes /api
 const API = axios.create({
+  baseURL: `${API_URL}/api`, // ✅ Include /api here
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 30000, // 30 second timeout
+  timeout: 30000,
 });
 
-// Request interceptor to add auth token and handle token refresh
+// Request interceptor to add auth token
 API.interceptors.request.use(
   (config) => {
-    // ✅ CORRECT: Prepend API_URL to all requests
-    if (!config.url.startsWith('http')) {
-      config.url = API_URL + config.url;
-    }
-    
     const token = authUtils.getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      
-      // Add request timestamp for debugging
       config.metadata = { startTime: Date.now() };
     }
     return config;
@@ -275,16 +237,13 @@ API.interceptors.request.use(
 // Enhanced response interceptor for comprehensive error handling
 API.interceptors.response.use(
   (response) => {
-    // Add request timing for debugging in development
     if (import.meta.env.DEV && response.config.metadata) {
       const duration = Date.now() - response.config.metadata.startTime;
       console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status} (${duration}ms)`);
     }
-    
     return response;
   },
   (error) => {
-    // Enhanced error logging
     const duration = error.config?.metadata ? Date.now() - error.config.metadata.startTime : 0;
     console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} - ${error.response?.status || 'NETWORK_ERROR'} (${duration}ms)`, {
       status: error.response?.status,
@@ -293,33 +252,26 @@ API.interceptors.response.use(
       message: error.message
     });
     
-    // Handle authentication errors with enhanced context preservation
     if (error.response?.status === 401 || error.response?.status === 403) {
       const authErrorInfo = AuthErrorHandler.handleAuthError(error);
-      
-      // Create enhanced error object with auth context
       const enhancedError = new Error(authErrorInfo.message);
       enhancedError.name = 'AuthenticationError';
       enhancedError.type = authErrorInfo.type;
       enhancedError.context = authErrorInfo.context;
       enhancedError.originalError = error;
       enhancedError.isAuthError = true;
-      
       return Promise.reject(enhancedError);
     }
     
-    // Handle network errors
     if (!error.response) {
       console.error('[API] Network error - server may be unavailable');
       const networkError = new Error('Network error - please check your connection and try again');
       networkError.name = 'NetworkError';
       networkError.isNetworkError = true;
       networkError.originalError = error;
-      
       return Promise.reject(networkError);
     }
     
-    // Handle other HTTP errors
     const httpError = new Error(error.response?.data?.message || `HTTP ${error.response.status}: ${error.response.statusText}`);
     httpError.name = 'HTTPError';
     httpError.status = error.response.status;
@@ -333,5 +285,4 @@ API.interceptors.response.use(
 
 // Export the enhanced AuthErrorHandler for use in components
 export { AuthErrorHandler, AUTH_ERROR_TYPES };
-
 export default API;

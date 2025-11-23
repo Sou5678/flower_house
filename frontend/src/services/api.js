@@ -2,9 +2,6 @@
 import API from '../utils/api';
 import authUtils from './auth';
 
-// ✅ REMOVE THIS LINE - utils/api.js already handles the base URL
-// const API_URL = 'https://flower-house.onrender.com/api';
-
 export const api = {
   // ==================== AUTHENTICATION ====================
   login: async (email, password) => {
@@ -29,6 +26,16 @@ export const api = {
 
   updatePassword: async (passwordData) => {
     const response = await API.put('/auth/updatepassword', passwordData);
+    return response.data;
+  },
+
+  forgotPassword: async (email) => {
+    const response = await API.post('/auth/forgotpassword', { email });
+    return response.data;
+  },
+
+  resetPassword: async (token, password) => {
+    const response = await API.put(`/auth/resetpassword/${token}`, { password });
     return response.data;
   },
 
@@ -100,15 +107,30 @@ export const api = {
     return response.data;
   },
 
+  cancelOrder: async (orderId, reason) => {
+    const response = await API.put(`/orders/${orderId}/cancel`, { reason });
+    return response.data;
+  },
+
   // ==================== PAYMENTS ====================
   createPaymentIntent: async (orderData) => {
-    const response = await API.post('/payment/create-payment-intent', orderData);
+    const response = await API.post('/payments/create-payment-intent', orderData);
+    return response.data;
+  },
+
+  verifyPayment: async (paymentData) => {
+    const response = await API.post('/payments/verify', paymentData);
     return response.data;
   },
 
   // ==================== CATEGORIES ====================
   getCategories: async () => {
     const response = await API.get('/categories');
+    return response.data;
+  },
+
+  getCategory: async (id) => {
+    const response = await API.get(`/categories/${id}`);
     return response.data;
   },
 
@@ -128,6 +150,11 @@ export const api = {
     return response.data;
   },
 
+  clearWishlist: async () => {
+    const response = await API.delete('/wishlist');
+    return response.data;
+  },
+
   // ==================== USERS ====================
   getUsers: async (params = {}) => {
     const response = await API.get('/users', { params });
@@ -141,6 +168,11 @@ export const api = {
 
   updateUser: async (userId, userData) => {
     const response = await API.put(`/users/${userId}`, userData);
+    return response.data;
+  },
+
+  deleteUser: async (userId) => {
+    const response = await API.delete(`/users/${userId}`);
     return response.data;
   },
 
@@ -190,7 +222,6 @@ export const handleApiError = (error) => {
     console.error('API Error:', error);
   }
   
-  // Enhanced error handling
   if (error.isAuthError) {
     return {
       status: 'error',
@@ -234,15 +265,13 @@ export const apiCall = async (apiFunction, maxRetries = 3) => {
     } catch (error) {
       lastError = error;
       
-      // Don't retry auth errors
       if (error.isAuthError) {
         throw error;
       }
       
-      // Don't retry on last attempt
       if (attempt < maxRetries) {
         console.warn(`API call attempt ${attempt} failed, retrying...`, error);
-        await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
       }
     }
   }
