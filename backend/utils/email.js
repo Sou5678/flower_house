@@ -9,7 +9,21 @@ class EmailService {
 
   initializeTransporter() {
     try {
-      this.transporter = nodemailer.createTransporter({
+      // Check if email service is disabled
+      if (process.env.EMAIL_DISABLED === 'true') {
+        console.log('📧 Email service is disabled');
+        this.transporter = null;
+        return;
+      }
+
+      // Check if email credentials are provided
+      if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
+        console.log('📧 Email credentials not provided, disabling email service');
+        this.transporter = null;
+        return;
+      }
+
+      this.transporter = nodemailer.createTransport({
         service: process.env.EMAIL_SERVICE || 'gmail',
         auth: {
           user: process.env.EMAIL_USERNAME,
@@ -37,15 +51,17 @@ class EmailService {
   async sendEmail(mailOptions) {
     try {
       if (!this.transporter) {
-        throw new Error('Email transporter not initialized');
+        console.log('📧 Email service disabled - skipping email:', mailOptions.subject);
+        return { messageId: 'disabled', status: 'skipped' };
       }
 
       const result = await this.transporter.sendMail(mailOptions);
-      console.log('Email sent successfully:', result.messageId);
+      console.log('📧 Email sent successfully:', result.messageId);
       return result;
     } catch (error) {
-      console.error('Error sending email:', error);
-      throw new Error('Email could not be sent');
+      console.error('❌ Error sending email:', error.message);
+      // Don't throw error, just log it to prevent app crashes
+      return { error: error.message, status: 'failed' };
     }
   }
 

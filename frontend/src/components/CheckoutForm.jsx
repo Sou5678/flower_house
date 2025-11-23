@@ -128,7 +128,7 @@ const CheckoutForm = ({ orderData, shippingAddress, onSuccess, onError }) => {
         <div className="flex justify-between items-center text-lg font-semibold">
           <span>Total Amount:</span>
           <span className="text-rose-600">
-            ${(orderData.totalAmount || orderData.total).toFixed(2)}
+            ₹{(orderData.totalAmount || orderData.total).toFixed(2)}
           </span>
         </div>
       </div>

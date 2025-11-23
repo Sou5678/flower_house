@@ -15,6 +15,7 @@ router.use(protect); // All order routes require authentication
 
 router.post('/', createOrder);
 router.get('/', getOrders);
+router.get('/my-orders', getOrders); // User's own orders
 router.get('/:id', getOrder);
 router.put('/:id/cancel', cancelOrder);
 

@@ -1,7 +1,9 @@
 // pages/ProductDetailPage.jsx
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Footer from '../components/Footer';
+import DeliveryInfo from '../components/DeliveryInfo';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -76,7 +78,10 @@ const ProductDetailPage = () => {
     // Update cart count in navbar (you might want to use context or state management for this)
     window.dispatchEvent(new Event('cartUpdated'));
     
-    alert('Added to cart successfully!');
+    toast.success('Added to cart successfully!', {
+      duration: 2000,
+      position: 'top-center',
+    });
   };
 
   const handleBuyNow = () => {
@@ -139,7 +144,7 @@ const ProductDetailPage = () => {
 
               {/* Price */}
               <div className="text-3xl font-light text-rose-600 mb-8">
-                ${currentPrice.toFixed(2)}
+                ₹{currentPrice.toFixed(2)}
               </div>
 
               {/* Size Selection */}
@@ -159,7 +164,7 @@ const ProductDetailPage = () => {
                       <div className="font-medium">{size.name}</div>
                       {size.price > 0 && (
                         <div className="text-sm text-rose-600 mt-1">
-                          +${size.price}
+                          +₹{size.price}
                         </div>
                       )}
                     </button>
@@ -184,7 +189,7 @@ const ProductDetailPage = () => {
                       <div className="flex justify-between items-center">
                         <span className="font-medium">{vase.name}</span>
                         {vase.price > 0 && (
-                          <span className="text-rose-600">+${vase.price}</span>
+                          <span className="text-rose-600">+₹{vase.price}</span>
                         )}
                       </div>
                     </button>
@@ -204,13 +209,16 @@ const ProductDetailPage = () => {
                 />
               </div>
 
+              {/* Delivery Information */}
+              <DeliveryInfo className="mb-6" />
+
               {/* Add to Cart and Buy Now Buttons */}
               <div className="space-y-4 mb-8">
                 <button
                   onClick={handleAddToCart}
                   className="w-full bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-lg font-medium text-lg transition duration-300"
                 >
-                  Add to Cart - ${currentPrice.toFixed(2)}
+                  Add to Cart - ₹{currentPrice.toFixed(2)}
                 </button>
                 <button
                   onClick={handleBuyNow}

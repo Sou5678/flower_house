@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, lazy, Suspense, memo } from "react";
+import { Toaster } from 'react-hot-toast';
 import "./App.css";
 import authUtils from './utils/auth';
 // Remove performance monitoring for now to fix immediate errors
@@ -42,6 +43,7 @@ const Contact = lazy(() => import('./components/Contact'));
 
 // Contexts
 import { WishlistProvider, useWishlist } from './contexts/WishlistContext';
+import { LocationProvider } from './contexts/LocationContext';
 const AdminProvider = lazy(() => import('./admin/contexts/AdminContext').then(module => ({ default: module.AdminProvider })));
 
 // Utilities
@@ -169,27 +171,42 @@ AppContent.displayName = 'AppContent';
 
 function App() {
   useEffect(() => {
-    // Performance monitoring disabled for now
-    // PM.startMeasure('app-initialization');
-    
-    // Cleanup function
-    return () => {
-      // PM.endMeasure('app-initialization');
-      // CleanupManager.cleanup();
-    };
+    console.log('App component mounted successfully');
   }, []);
 
   return (
     <ErrorBoundary>
       <Router>
         <ScrollToTop />
-        <WishlistProvider>
-          <AppContent />
-          {/* Performance Monitor disabled for now */}
-          {/* <Suspense fallback={null}>
-            <PerformanceMonitor />
-          </Suspense> */}
-        </WishlistProvider>
+        <LocationProvider>
+          <WishlistProvider>
+            <AppContent />
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              gutter={8}
+              containerClassName=""
+              containerStyle={{}}
+              toastOptions={{
+                // Define default options
+                className: '',
+                duration: 4000,
+                style: {
+                  background: '#363636',
+                  color: '#fff',
+                },
+                // Default options for specific types
+                success: {
+                  duration: 3000,
+                  theme: {
+                    primary: 'green',
+                    secondary: 'black',
+                  },
+                },
+              }}
+            />
+          </WishlistProvider>
+        </LocationProvider>
       </Router>
     </ErrorBoundary>
   );

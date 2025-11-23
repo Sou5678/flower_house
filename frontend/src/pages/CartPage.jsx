@@ -1,6 +1,7 @@
 // pages/CartPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Footer from '../components/Footer';
 import EmptyState from '../components/EmptyState';
 import Container from '../components/Container';
@@ -10,6 +11,7 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Load cart items from localStorage
@@ -56,6 +58,32 @@ const CartPage = () => {
     // Implement save for later functionality
   };
 
+  const proceedToCheckout = () => {
+    // Check if user is authenticated
+    const token = localStorage.getItem('amourFloralsToken');
+    if (!token) {
+      toast.error('Please login to proceed with checkout');
+      navigate('/login', { state: { from: '/cart' } });
+      return;
+    }
+
+    // Check if cart has items
+    if (cartItems.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
+
+    // Navigate to checkout with cart data
+    navigate('/checkout', {
+      state: {
+        cartItems: cartItems,
+        subtotal: subtotal,
+        discount: discountAmount,
+        total: total
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen bg-white pt-20">
       <Section padding="default">
@@ -93,7 +121,7 @@ const CartPage = () => {
                       <div className="flex-1">
                         <h3 className="text-xl font-medium text-gray-800 mb-2">{item.product}</h3>
                         <p className="text-gray-600 mb-2">A stunning arrangement of deep red roses.</p>
-                        <p className="text-lg font-medium text-rose-600">${item.price.toFixed(2)}</p>
+                        <p className="text-lg font-medium text-rose-600">₹{item.price.toFixed(2)}</p>
                         
                         {/* Selected Options */}
                         <div className="mt-2 text-sm text-gray-500">
@@ -144,7 +172,7 @@ const CartPage = () => {
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Subtotal</span>
-                      <span className="text-gray-800">${subtotal.toFixed(2)}</span>
+                      <span className="text-gray-800">₹{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Shipping</span>
@@ -153,7 +181,7 @@ const CartPage = () => {
                     {discount > 0 && (
                       <div className="flex justify-between text-green-600">
                         <span>Discount</span>
-                        <span>-${discountAmount.toFixed(2)}</span>
+                        <span>-₹{discountAmount.toFixed(2)}</span>
                       </div>
                     )}
                   </div>
@@ -179,10 +207,13 @@ const CartPage = () => {
 
                   <div className="flex justify-between text-xl font-medium text-gray-800 mb-6 border-t border-gray-200 pt-4">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>₹{total.toFixed(2)}</span>
                   </div>
 
-                  <button className="w-full bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-lg font-medium text-lg transition duration-300 mb-4">
+                  <button 
+                    onClick={proceedToCheckout}
+                    className="w-full bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-lg font-medium text-lg transition duration-300 mb-4"
+                  >
                     Proceed to Checkout
                   </button>
 

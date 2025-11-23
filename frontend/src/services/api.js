@@ -116,7 +116,7 @@ export const api = {
 
 // Utility function to handle API errors
 export const handleApiError = (error) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     console.error('API Error:', error);
   }
   return {

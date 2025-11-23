@@ -18,7 +18,7 @@ const ProfilePage = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch user data from MongoDB on component mount
+  // Fetch user data and orders from MongoDB on component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -54,6 +54,28 @@ const ProfilePage = () => {
     fetchUserData();
   }, [navigate]);
 
+  // Fetch user orders
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      const response = await API.get('/api/orders/my-orders');
+      if (response.data.status === 'success') {
+        setOrderHistory(response.data.data.orders || []);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  // Fetch orders when orders section is active
+  useEffect(() => {
+    if (activeSection === 'orders' && !ordersLoading && orderHistory.length === 0) {
+      fetchOrders();
+    }
+  }, [activeSection]);
+
   const favorites = [
     { id: 1, name: 'Pastel Dreams', price: 75.00 },
     { id: 2, name: 'Sunny Radiance', price: 65.00 },
@@ -61,11 +83,8 @@ const ProfilePage = () => {
     { id: 4, name: 'Crimson Passi', price: 95.00 }
   ];
 
-  const orderHistory = [
-    { id: 'AF-10385', date: 'July 15, 2024', status: 'Delivered' },
-    { id: 'AF-10211', date: 'May 02, 2024', status: 'Delivered' },
-    { id: 'AF-10159', date: 'March 18, 2024', status: 'Delivered' }
-  ];
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
     setUserData(prev => ({
@@ -302,34 +321,117 @@ const ProfilePage = () => {
               </p>
             </div>
 
-            <div className="space-y-6">
-              {orderHistory.map((order) => (
-                <div key={order.id} className="bg-white rounded-2xl border border-gray-200 p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="text-gray-600 text-sm font-medium mb-1">Order ID</h4>
-                      <p className="text-gray-800 font-medium">#{order.id}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-gray-600 text-sm font-medium mb-1">Date</h4>
-                      <p className="text-gray-800">{order.date}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-gray-600 text-sm font-medium mb-1">Status</h4>
-                      <div className="flex items-center">
-                        <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                        <span className="text-green-600">{order.status}</span>
+            {ordersLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading your orders...</p>
+              </div>
+            ) : orderHistory.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Orders Yet</h3>
+                <p className="text-gray-600 mb-4">You haven't placed any orders yet. Start shopping to see your order history here.</p>
+                <Link
+                  to="/products"
+                  className="inline-block bg-rose-600 text-white px-6 py-2 rounded-lg hover:bg-rose-700 transition duration-300"
+                >
+                  Start Shopping
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {orderHistory.map((order) => {
+                  const getStatusColor = (status) => {
+                    switch (status?.toLowerCase()) {
+                      case 'delivered':
+                        return 'bg-green-500 text-green-600';
+                      case 'shipped':
+                        return 'bg-blue-500 text-blue-600';
+                      case 'processing':
+                        return 'bg-yellow-500 text-yellow-600';
+                      case 'confirmed':
+                        return 'bg-purple-500 text-purple-600';
+                      case 'cancelled':
+                        return 'bg-red-500 text-red-600';
+                      default:
+                        return 'bg-gray-500 text-gray-600';
+                    }
+                  };
+
+                  return (
+                    <div key={order._id} className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition duration-300">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                          <h4 className="text-gray-600 text-sm font-medium mb-1">Order Number</h4>
+                          <p className="text-gray-800 font-medium">#{order.orderNumber}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-gray-600 text-sm font-medium mb-1">Date</h4>
+                          <p className="text-gray-800">{new Date(order.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-gray-600 text-sm font-medium mb-1">Total</h4>
+                          <p className="text-gray-800 font-semibold">₹{(order.totalAmount || order.total)?.toFixed(2)}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-gray-600 text-sm font-medium mb-1">Status</h4>
+                          <div className="flex items-center">
+                            <span className={`w-2 h-2 rounded-full mr-2 ${getStatusColor(order.orderStatus || order.status)}`}></span>
+                            <span className={getStatusColor(order.orderStatus || order.status).split(' ')[1]}>
+                              {(order.orderStatus || order.status)?.charAt(0).toUpperCase() + (order.orderStatus || order.status)?.slice(1)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Order Items Preview */}
+                      {order.items && order.items.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-gray-100">
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Items ({order.items.length})</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {order.items.slice(0, 3).map((item, index) => (
+                              <span key={index} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                {item.product?.name || item.name} x{item.quantity}
+                              </span>
+                            ))}
+                            {order.items.length > 3 && (
+                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                +{order.items.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                        <div className="flex space-x-4">
+                          <Link
+                            to={`/orders/${order._id}`}
+                            className="text-rose-600 hover:text-rose-700 font-medium transition duration-300"
+                          >
+                            View Details
+                          </Link>
+                          {(order.orderStatus === 'delivered' || order.status === 'delivered') && (
+                            <button className="text-blue-600 hover:text-blue-700 font-medium transition duration-300">
+                              Reorder
+                            </button>
+                          )}
+                        </div>
+                        {order.paymentStatus === 'completed' && (
+                          <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">
+                            Paid
+                          </span>
+                        )}
                       </div>
                     </div>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <button className="text-rose-600 hover:text-rose-700 font-medium transition duration-300">
-                      View Order Details
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
 

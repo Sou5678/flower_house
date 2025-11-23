@@ -37,14 +37,14 @@ const OrderSummary = ({ order }) => {
               {/* Size Selection */}
               {item.size && (
                 <p className="text-xs text-gray-600">
-                  Size: {item.size.name} (+${item.size.price?.toFixed(2)})
+                  Size: {item.size.name} (+₹{item.size.price?.toFixed(2)})
                 </p>
               )}
               
               {/* Vase Selection */}
               {item.vase && (
                 <p className="text-xs text-gray-600">
-                  Vase: {item.vase.name} (+${item.vase.price?.toFixed(2)})
+                  Vase: {item.vase.name} (+₹{item.vase.price?.toFixed(2)})
                 </p>
               )}
               
@@ -58,7 +58,7 @@ const OrderSummary = ({ order }) => {
               <div className="flex items-center justify-between mt-1">
                 <span className="text-sm text-gray-600">Qty: {item.quantity}</span>
                 <span className="text-sm font-medium text-gray-900">
-                  ${((item.price + (item.size?.price || 0) + (item.vase?.price || 0)) * item.quantity).toFixed(2)}
+                  ₹{((item.price + (item.size?.price || 0) + (item.vase?.price || 0)) * item.quantity).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -70,31 +70,31 @@ const OrderSummary = ({ order }) => {
       <div className="space-y-2 pt-4 border-t border-gray-200">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Subtotal</span>
-          <span className="text-gray-900">${subtotal.toFixed(2)}</span>
+          <span className="text-gray-900">₹{subtotal.toFixed(2)}</span>
         </div>
         
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Shipping</span>
           <span className="text-gray-900">
-            {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
+            {shipping === 0 ? 'Free' : `₹${shipping.toFixed(2)}`}
           </span>
         </div>
         
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Tax</span>
-          <span className="text-gray-900">${tax.toFixed(2)}</span>
+          <span className="text-gray-900">₹{tax.toFixed(2)}</span>
         </div>
         
         {discount > 0 && (
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Discount</span>
-            <span className="text-green-600">-${discount.toFixed(2)}</span>
+            <span className="text-green-600">-₹{discount.toFixed(2)}</span>
           </div>
         )}
         
         <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-200">
           <span className="text-gray-900">Total</span>
-          <span className="text-rose-600">${total.toFixed(2)}</span>
+          <span className="text-rose-600">₹{total.toFixed(2)}</span>
         </div>
       </div>
 
@@ -134,7 +134,7 @@ const OrderSummary = ({ order }) => {
               className="text-rose-600 focus:ring-rose-500"
             />
             <span className="ml-2 text-sm text-gray-700">
-              Express Delivery (2-3 business days) - $15.00
+              Express Delivery (2-3 business days) - ₹150.00
             </span>
           </label>
           <label className="flex items-center">
@@ -145,7 +145,7 @@ const OrderSummary = ({ order }) => {
               className="text-rose-600 focus:ring-rose-500"
             />
             <span className="ml-2 text-sm text-gray-700">
-              Same Day Delivery - $25.00
+              Same Day Delivery - ₹250.00
             </span>
           </label>
         </div>

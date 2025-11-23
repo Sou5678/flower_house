@@ -10,7 +10,7 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
       city: initialAddress?.city || '',
       state: initialAddress?.state || '',
       zipCode: initialAddress?.zipCode || '',
-      country: initialAddress?.country || 'United States',
+      country: initialAddress?.country || 'India',
       phone: initialAddress?.phone || user?.phone || ''
     };
   });
@@ -37,9 +37,9 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
     }
 
     if (!address.zipCode.trim()) {
-      newErrors.zipCode = 'ZIP code is required';
-    } else if (!/^\d{5}(-\d{4})?$/.test(address.zipCode)) {
-      newErrors.zipCode = 'Please enter a valid ZIP code';
+      newErrors.zipCode = 'PIN code is required';
+    } else if (!/^\d{6}$/.test(address.zipCode)) {
+      newErrors.zipCode = 'Please enter a valid 6-digit PIN code';
     }
 
     if (!address.phone.trim()) {
@@ -67,14 +67,12 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
   };
 
   const states = [
-    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-    'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
-    'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
-    'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-    'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
-    'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-    'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
-    'Wisconsin', 'Wyoming'
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
+    'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
+    'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+    'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand',
+    'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu',
+    'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
   ];
 
   return (
@@ -159,7 +157,7 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
-            ZIP Code *
+            PIN Code *
           </label>
           <input
             type="text"
@@ -169,7 +167,7 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 ${
               errors.zipCode ? 'border-red-500' : 'border-gray-300'
             }`}
-            placeholder="12345"
+            placeholder="110001"
           />
           {errors.zipCode && <p className="mt-1 text-sm text-red-600">{errors.zipCode}</p>}
         </div>
@@ -186,7 +184,7 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             }`}
-            placeholder="(555) 123-4567"
+            placeholder="+91 98765 43210"
           />
           {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
         </div>
@@ -203,6 +201,7 @@ const AddressForm = ({ initialAddress, onSubmit }) => {
           onChange={(e) => handleChange('country', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500"
         >
+          <option value="India">India</option>
           <option value="United States">United States</option>
           <option value="Canada">Canada</option>
         </select>

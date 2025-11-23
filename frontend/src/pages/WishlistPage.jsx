@@ -321,7 +321,7 @@ const WishlistPage = () => {
       }
       
       // Show operation performance info in development
-      if (process.env.NODE_ENV === 'development' && results.duration) {
+      if (import.meta.env.DEV && results.duration) {
         console.log(`Bulk remove operation completed in ${results.duration}ms with ${results.successRate}% success rate`);
       }
       
@@ -411,7 +411,7 @@ const WishlistPage = () => {
       }
       
       // Show operation performance info in development
-      if (process.env.NODE_ENV === 'development' && results.duration) {
+      if (import.meta.env.DEV && results.duration) {
         console.log(`Bulk move to cart operation completed in ${results.duration}ms with ${results.successRate}% success rate`);
         if (results.transactions?.length > 0) {
           console.log(`${results.transactions.length} atomic transactions completed successfully`);

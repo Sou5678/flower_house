@@ -14,7 +14,7 @@ class ErrorBoundary extends React.Component {
     console.error('Error Boundary caught an error:', error, errorInfo);
     
     // Log error to monitoring service
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env.PROD) {
       // Send to error tracking service like Sentry
     }
   }

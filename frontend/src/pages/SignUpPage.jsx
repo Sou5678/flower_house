@@ -1,6 +1,7 @@
 // pages/SignUpPage.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import API from '../utils/api';
 import authUtils from '../utils/auth';
 
@@ -16,6 +17,18 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  // Test API connection
+  const testConnection = async () => {
+    try {
+      const response = await API.get('/api/health');
+      toast.success('Backend connection successful!');
+      console.log('Health check response:', response.data);
+    } catch (error) {
+      toast.error('Backend connection failed!');
+      console.error('Health check error:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -66,15 +79,31 @@ const SignUpPage = () => {
         // Dispatch auth updated event
         window.dispatchEvent(new Event('authUpdated'));
 
-        alert('Account created successfully!');
+        toast.success('Account created successfully! Welcome to Apna Flar!', {
+          duration: 3000,
+          position: 'top-center',
+        });
         navigate('/profile'); // Redirect to profile page
       }
     } catch (error) {
       console.error('Signup error:', error);
-      setError(
-        error.response?.data?.message || 
-        'Signup failed. Please try again.'
-      );
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+      
+      let errorMessage = 'Signup failed. Please try again.';
+      
+      if (error.response) {
+        // Server responded with error status
+        errorMessage = error.response.data?.message || `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        errorMessage = 'Unable to connect to server. Please check your connection.';
+      } else {
+        // Something else happened
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

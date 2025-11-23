@@ -270,7 +270,7 @@ API.interceptors.request.use(
 API.interceptors.response.use(
   (response) => {
     // Add request timing for debugging in development
-    if (process.env.NODE_ENV === 'development' && response.config.metadata) {
+    if (import.meta.env.DEV && response.config.metadata) {
       const duration = Date.now() - response.config.metadata.startTime;
       console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status} (${duration}ms)`);
     }

@@ -1,7 +1,10 @@
 // components/Nav.jsx
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import authUtils from '../utils/auth';
+import locationService from '../services/locationService';
+import LocationModal from './LocationModal';
 
 const Nav = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +15,8 @@ const Nav = memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [userLocation, setUserLocation] = useState('Select Location');
   const [isLocationLoading, setIsLocationLoading] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [locationData, setLocationData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,55 +83,53 @@ const Nav = memo(() => {
     }
   }, [isLoggedIn, navigate]);
 
-  const getUserLocation = useCallback(() => {
+  const getUserLocation = useCallback(async (forceRefresh = false) => {
     setIsLocationLoading(true);
     
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          try {
-            const { latitude, longitude } = position.coords;
-            
-            // Use reverse geocoding to get city name
-            // For demo purposes, we'll use a mock response
-            // In production, you'd use Google Maps API or similar
-            const mockCities = [
-              'New York, NY',
-              'Los Angeles, CA', 
-              'Chicago, IL',
-              'Houston, TX',
-              'Phoenix, AZ',
-              'Philadelphia, PA',
-              'San Antonio, TX',
-              'San Diego, CA',
-              'Dallas, TX',
-              'San Jose, CA'
-            ];
-            
-            // Simulate API call delay
-            setTimeout(() => {
-              const randomCity = mockCities[Math.floor(Math.random() * mockCities.length)];
-              setUserLocation(randomCity);
-              localStorage.setItem('userLocation', randomCity);
-              setIsLocationLoading(false);
-            }, 1000);
-            
-          } catch (error) {
-            console.error('Error getting location name:', error);
-            setUserLocation('Location unavailable');
-            setIsLocationLoading(false);
-          }
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          setUserLocation('Location denied');
-          setIsLocationLoading(false);
+    try {
+      const location = await locationService.getUserLocation(forceRefresh);
+      
+      if (location.isDefault) {
+        // If default location, open modal for manual selection
+        setUserLocation('Select Location');
+        setIsLocationModalOpen(true);
+      } else {
+        setLocationData(location);
+        setUserLocation(location.city);
+        
+        // Show success feedback for automatic detection
+        if (location.source === 'gps') {
+          toast.success(`Location detected: ${location.city}, ${location.state}`, {
+            duration: 3000,
+            position: 'top-center',
+          });
         }
-      );
-    } else {
-      setUserLocation('Location not supported');
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setUserLocation('Location unavailable');
+      
+      // Show error toast
+      toast.error('Unable to detect location. Please select manually.', {
+        duration: 4000,
+        position: 'top-center',
+      });
+      
+      // Open modal for manual selection as fallback
+      setIsLocationModalOpen(true);
+    } finally {
       setIsLocationLoading(false);
     }
+  }, []);
+
+  const handleLocationSelect = useCallback((location) => {
+    setLocationData(location);
+    setUserLocation(location.city);
+    setIsLocationModalOpen(false);
+  }, []);
+
+  const handleLocationClick = useCallback(() => {
+    setIsLocationModalOpen(true);
   }, []);
 
   // Memoized menu close handler with scroll to top
@@ -172,15 +175,51 @@ const Nav = memo(() => {
 
   // Load saved location on component mount
   useEffect(() => {
-    const savedLocation = localStorage.getItem('userLocation');
-    if (savedLocation) {
-      setUserLocation(savedLocation);
-    }
+    const loadSavedLocation = async () => {
+      const savedLocation = locationService.getSavedLocation();
+      if (savedLocation) {
+        setLocationData(savedLocation);
+        setUserLocation(savedLocation.city);
+      } else {
+        // Try to get current location automatically
+        try {
+          const location = await locationService.getUserLocation();
+          if (!location.isDefault) {
+            setLocationData(location);
+            setUserLocation(location.city);
+          }
+        } catch (error) {
+          console.log('Could not get automatic location');
+        }
+      }
+    };
+
+    loadSavedLocation();
+
+    // Listen for location updates
+    const handleLocationUpdate = (event) => {
+      const location = event.detail;
+      setLocationData(location);
+      setUserLocation(location.city);
+    };
+
+    const handleLocationClear = () => {
+      setLocationData(null);
+      setUserLocation('Select Location');
+    };
+
+    window.addEventListener('locationUpdated', handleLocationUpdate);
+    window.addEventListener('locationCleared', handleLocationClear);
+
+    return () => {
+      window.removeEventListener('locationUpdated', handleLocationUpdate);
+      window.removeEventListener('locationCleared', handleLocationClear);
+    };
   }, []);
 
   return (
-    <nav className="bg-white/95 backdrop-blur-md shadow-soft border-b border-primary-100 fixed top-0 left-0 right-0 z-50">
-      <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12">
+    <nav className="bg-white/95 backdrop-blur-md shadow-soft border-b border-primary-100 fixed top-0 left-0 right-0 z-40">
+      <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 relative">
         <div className="flex items-center py-4 gap-2 sm:gap-4">
           {/* Left Side - Menu Button and Logo */}
           <div className="flex items-center space-x-3 flex-shrink-0">
@@ -235,29 +274,115 @@ const Nav = memo(() => {
           {/* Right Side Icons - Better Spaced */}
           <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-5 flex-shrink-0">
             {/* Location */}
-            <button 
-              onClick={getUserLocation}
-              disabled={isLocationLoading}
-              className="flex flex-col items-center text-gray-700 hover:text-rose-600 transition duration-300 disabled:opacity-50 min-w-[70px]"
-            >
-              <div className="relative">
-                <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <div className="relative group">
+              <button 
+                onClick={handleLocationClick}
+                disabled={isLocationLoading}
+                className="flex flex-col items-center text-gray-700 hover:text-rose-600 transition duration-300 disabled:opacity-50 min-w-[70px]"
+              >
+                <div className="relative">
+                  <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {isLocationLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="animate-spin h-4 w-4 text-rose-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <span className="text-xs font-medium max-w-[70px] truncate text-center">
+                  {isLocationLoading ? 'Loading...' : userLocation}
+                </span>
+                {/* Dropdown arrow */}
+                <svg className="w-3 h-3 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-                {isLocationLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg className="animate-spin h-4 w-4 text-rose-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+              </button>
+              
+              {/* Location dropdown */}
+              <div className="absolute top-[calc(100%+16px)] left-1/2 transform -translate-x-1/2 bg-white shadow-xl rounded-lg border border-gray-200 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto z-[100] min-w-[220px]">
+                {/* Use Current Location Option */}
+                <div className="p-3 border-b border-gray-100">
+                  <button
+                    onClick={() => getUserLocation(true)}
+                    disabled={isLocationLoading}
+                    className="w-full flex items-center space-x-3 p-2 text-left hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <div className="flex-shrink-0">
+                      {isLocationLoading ? (
+                        <svg className="animate-spin h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-gray-900">
+                        {isLocationLoading ? 'Detecting location...' : 'Use Current Location'}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {isLocationLoading ? 'Please wait while we find you...' : 'Automatically detect your location'}
+                      </div>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Current Location Info */}
+                {locationData && (
+                  <div className="p-3 border-b border-gray-100">
+                    <div className="text-xs text-gray-500 mb-1">Current Location</div>
+                    <div className="text-sm font-medium text-gray-900">{locationData.city}</div>
+                    <div className="text-xs text-gray-600">{locationData.state}, {locationData.country}</div>
+                    
+                    <div className="flex space-x-2 mt-2">
+                      <button
+                        onClick={getUserLocation}
+                        className="text-xs bg-rose-50 text-rose-600 px-2 py-1 rounded hover:bg-rose-100 transition-colors"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={handleLocationClick}
+                        className="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+                      >
+                        Change
+                      </button>
+                    </div>
                   </div>
                 )}
+
+                {/* Manual Location Selection */}
+                <div className="p-3">
+                  <button
+                    onClick={handleLocationClick}
+                    className="w-full flex items-center space-x-3 p-2 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="flex-shrink-0">
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-gray-900">
+                        Search Location
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Manually select your city
+                      </div>
+                    </div>
+                  </button>
+                </div>
               </div>
-              <span className="text-xs font-medium max-w-[70px] truncate text-center">
-                {isLocationLoading ? 'Loading...' : userLocation}
-              </span>
-            </button>
+            </div>
 
             {/* Admin Panel - Only show for admin users */}
             {isAdmin && (
@@ -384,6 +509,14 @@ const Nav = memo(() => {
           onClick={handleMenuClose}
         ></div>
       )}
+
+      {/* Location Modal */}
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onLocationSelect={handleLocationSelect}
+        currentLocation={locationData}
+      />
     </nav>
   );
 });

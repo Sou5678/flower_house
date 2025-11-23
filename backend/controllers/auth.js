@@ -28,6 +28,11 @@ const sendTokenResponse = (user, statusCode, res) => {
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
+    console.log('Registration request received:', { 
+      body: req.body, 
+      headers: req.headers['content-type'] 
+    });
+    
     const { fullName, email, password, phone, birthday } = req.body;
 
     // Check if user exists
@@ -69,6 +74,11 @@ exports.register = async (req, res, next) => {
 // @access  Public
 exports.login = async (req, res, next) => {
   try {
+    console.log('Login request received:', { 
+      body: req.body, 
+      headers: req.headers['content-type'] 
+    });
+    
     const { email, password } = req.body;
 
     // Validate email & password

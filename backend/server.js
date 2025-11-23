@@ -70,6 +70,16 @@ connectDB();
 // ROUTES
 // =====================
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Server is running!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));
@@ -83,6 +93,7 @@ app.use('/api/email', require('./routes/email'));
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/order-management', require('./routes/orderManagement'));
+app.use('/api/location', require('./routes/location'));
 
 // =====================
 // HEALTH CHECK

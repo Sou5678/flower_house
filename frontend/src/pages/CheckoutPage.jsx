@@ -32,44 +32,67 @@ const CheckoutPage = () => {
       return;
     }
 
-    // Get order data from location state or create from cart
-    const orderFromState = location.state?.orderData;
-    if (orderFromState) {
-      setOrderData(orderFromState);
-      createPaymentIntent(orderFromState);
-    } else {
-      // Create order from cart
-      createOrderFromCart();
+    // Get cart data from location state or localStorage
+    const cartFromState = location.state?.cartItems;
+    const cart = cartFromState || JSON.parse(localStorage.getItem('amourFloralsCart') || '[]');
+    
+    console.log('Cart data:', cart); // Debug log
+    
+    if (cart.length === 0) {
+      navigate('/cart');
+      return;
     }
+
+    // Create order data from cart
+    const calculatedSubtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const calculatedDiscount = location.state?.discount || 0;
+    const calculatedTotal = calculatedSubtotal - calculatedDiscount;
+    
+    const orderData = {
+      items: cart,
+      subtotal: location.state?.subtotal || calculatedSubtotal,
+      discount: calculatedDiscount,
+      total: location.state?.total || calculatedTotal,
+      shippingFee: 0, // Will be calculated based on shipping method
+      tax: calculatedTotal * 0.08 // 8% tax
+    };
+
+    console.log('Order data created:', orderData); // Debug log
+    setOrderData(orderData);
+    setLoading(false);
   }, [navigate, location]);
 
-  const createOrderFromCart = async () => {
+  const createOrderFromCart = async (finalShippingAddress) => {
     try {
       setLoading(true);
-      const cart = JSON.parse(localStorage.getItem('amourFloralsCart') || '[]');
       
-      if (cart.length === 0) {
+      if (!orderData || !orderData.items || orderData.items.length === 0) {
         navigate('/cart');
         return;
       }
 
-      // Create order
+      // Create order with shipping address
       const response = await API.post('/api/orders', {
-        items: cart.map(item => ({
-          product: item._id,
+        items: orderData.items.map(item => ({
+          product: item._id || item.id,
           quantity: item.quantity,
           size: item.selectedSize,
           vase: item.selectedVase,
-          personalNote: item.personalNote
+          personalNote: item.personalNote,
+          price: item.price
         })),
-        shippingAddress: shippingAddress
+        shippingAddress: finalShippingAddress,
+        subtotal: orderData.subtotal,
+        discount: orderData.discount,
+        total: orderData.total
       });
 
       const newOrder = response.data.data;
       setOrderData(newOrder);
-      await createPaymentIntent(newOrder);
+      return newOrder;
     } catch (err) {
       setError(err.message || 'Failed to create order');
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -86,9 +109,20 @@ const CheckoutPage = () => {
     }
   };
 
-  const handleAddressSubmit = (address) => {
+  const handleAddressSubmit = async (address) => {
     setShippingAddress(address);
-    setCurrentStep(2);
+    
+    try {
+      // Create order with shipping address
+      const order = await createOrderFromCart(address);
+      if (order) {
+        setCurrentStep(2);
+      }
+    } catch (err) {
+      console.error('Failed to create order:', err);
+      // Still proceed to payment step with order data
+      setCurrentStep(2);
+    }
   };
 
   const handlePaymentSuccess = (paymentData) => {
