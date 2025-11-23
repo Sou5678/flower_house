@@ -3,7 +3,7 @@ import axios from 'axios';
 import authUtils from './auth';
 
 // ✅ CORRECT: Include /api in base URL with Render URL
-const API_URL = 'https://flower-house.onrender.com/api';
+const API_URL = 'https://flower-house.onrender.com';
 
 // Authentication error types for better categorization
 const AUTH_ERROR_TYPES = {
